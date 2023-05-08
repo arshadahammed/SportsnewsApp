@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "106199230883",
+    "project_id": "sportsnews-bc7a9",
+    "storage_bucket": "sportsnews-bc7a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106199230883:android:01104a4e8694c78d7f9216",
+        "android_client_info": {
+          "package_name": "com.seyfert.sportsnews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "106199230883-sv2vpacsab1j30i3mrjnev41v56j32v0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVLak1JYqbSLMAxbwXowJXEYwejQp4wfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "106199230883-sv2vpacsab1j30i3mrjnev41v56j32v0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
