@@ -27,13 +27,12 @@ class _PopularLoadingWidgetState extends State<PopularLoadingWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
-    return Expanded(
-        child: PopularNewsShimmer(
-            baseShimmerColor: baseShimmerColor,
-            highlightShimmerColor: highlightShimmerColor,
-            widgetShimmerColor: widgetShimmerColor,
-            size: size,
-            borderRadius: borderRadius));
+    return PopularNewsShimmer(
+        baseShimmerColor: baseShimmerColor,
+        highlightShimmerColor: highlightShimmerColor,
+        widgetShimmerColor: widgetShimmerColor,
+        size: size,
+        borderRadius: borderRadius);
   }
 }
 
@@ -83,45 +82,48 @@ class PopularNewsShimmer extends StatelessWidget {
             //     ],
             //   ),
             // ),
-            SizedBox(
-              height: 220,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(right: 16),
-                    width: 200,
-                    // color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Container(
-                                  height: size.height * 0.25,
-                                  width: double.infinity,
-                                  color: widgetShimmerColor,
-                                ))),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15),
-                          child: Container(
-                            width: double.infinity,
-                            height: size.height * 0.05,
-                            decoration: BoxDecoration(
-                              borderRadius: borderRadius,
-                              color: widgetShimmerColor,
+            Padding(
+              padding: const EdgeInsets.only(left: 5, right: 10),
+              child: SizedBox(
+                height: 220,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.only(right: 16),
+                      width: 200,
+                      // color: Colors.blue,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Container(
+                                    height: size.height * 0.25,
+                                    width: double.infinity,
+                                    color: widgetShimmerColor,
+                                  ))),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: Container(
+                              width: double.infinity,
+                              height: size.height * 0.05,
+                              decoration: BoxDecoration(
+                                borderRadius: borderRadius,
+                                color: widgetShimmerColor,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],

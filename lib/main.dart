@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/inner_screens/blog_details.dart';
 import 'package:sportsnews/providers/news_provider.dart';
+import 'package:sportsnews/screens/main_homescreen.dart';
 
 //Screens
 import 'providers/bookmarks_provider.dart';
@@ -64,7 +65,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           title: 'News App - Flutter&API Course',
           theme: Styles.themeData(themeChangeProvider.getDarkTheme, context),
-          home: const HomeScreen(),
+          home: const MainHomeScreen(),
           routes: {
             NewsDetailsScreen.routeName: (ctx) => const NewsDetailsScreen(),
           },

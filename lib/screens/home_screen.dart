@@ -8,13 +8,23 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:sportsnews/consts/global_colors.dart';
 import 'package:sportsnews/consts/vars.dart';
 import 'package:sportsnews/inner_screens/search_screen.dart';
+import 'package:sportsnews/models/main_categories.dart';
+import 'package:sportsnews/screens/all_news.dart';
+import 'package:sportsnews/screens/category_pages/all_news.dart';
+import 'package:sportsnews/screens/category_pages/cricket_news.dart';
+import 'package:sportsnews/screens/category_pages/football.dart';
+import 'package:sportsnews/screens/category_pages/other_news.dart';
+import 'package:sportsnews/screens/category_pages/tennis_news.dart';
 import 'package:sportsnews/services/utils.dart';
+import 'package:sportsnews/widgets/category_box.dart';
 import 'package:sportsnews/widgets/drawer_widget.dart';
 import 'package:sportsnews/widgets/empty_screen.dart';
 import 'package:sportsnews/widgets/popular_loadingwidget.dart';
 import 'package:sportsnews/widgets/popular_news.dart';
+import 'package:sportsnews/widgets/toptrending_loadingwidget.dart';
 import 'package:sportsnews/widgets/vertical_spacing.dart';
 
 import '../models/news_model.dart';
@@ -22,7 +32,6 @@ import '../providers/news_provider.dart';
 import '../providers/theme_provider.dart';
 import '../services/news_api.dart';
 import '../widgets/articles_widget.dart';
-import '../widgets/loading_widget.dart';
 import '../widgets/tabs.dart';
 import '../widgets/top_tending.dart';
 
@@ -37,309 +46,339 @@ class _HomeScreenState extends State<HomeScreen> {
   var newsType = NewsType.topTrending;
   int currentPageIndex = 0;
   String sortBy = SortByEnum.publishedAt.name;
+  final pages = [
+    AllCategoryNews(),
+    FootballNews(),
+    CricketNews(),
+    TennisNews(),
+    OtherNews(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: color),
-          elevation: 0,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          centerTitle: true,
-          title: Text(
-            'Sports News',
-            style: GoogleFonts.lobster(
-                textStyle:
-                    TextStyle(color: color, fontSize: 20, letterSpacing: 0.6)),
+    return Scaffold(
+      // resizeToAvoidBottomInset: true,
+      // appBar: AppBar(
+      //   iconTheme: IconThemeData(color: color),
+      //   elevation: 0,
+      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      //   centerTitle: true,
+      //   title: Text(
+      //     'Sports News',
+      //     style: GoogleFonts.lobster(
+      //         textStyle:
+      //             TextStyle(color: color, fontSize: 20, letterSpacing: 0.6)),
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //       onPressed: () {
+      //         Navigator.push(
+      //           context,
+      //           PageTransition(
+      //               type: PageTransitionType.rightToLeft,
+      //               child: const SearchScreen(),
+      //               inheritTheme: true,
+      //               ctx: context),
+      //         );
+      //       },
+      //       icon: const Icon(
+      //         IconlyLight.search,
+      //       ),
+      //     )
+      //   ],
+      // ),
+      // drawer: const DrawerWidget(),
+      body: ListView(
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //categories
+          getCategories(),
+          const SizedBox(
+            height: 5,
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.rightToLeft,
-                      child: const SearchScreen(),
-                      inheritTheme: true,
-                      ctx: context),
-                );
-              },
-              icon: const Icon(
-                IconlyLight.search,
-              ),
-            )
-          ],
-        ),
-        drawer: const DrawerWidget(),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(children: [
-            Row(
-              children: [
-                TabsWidget(
-                  text: 'Top trending',
-                  color: newsType == NewsType.topTrending
-                      ? Theme.of(context).cardColor
-                      : Colors.transparent,
-                  function: () {
-                    if (newsType == NewsType.topTrending) {
-                      return;
-                    }
-                    setState(() {
-                      newsType = NewsType.topTrending;
-                    });
-                  },
-                  fontSize: newsType == NewsType.topTrending ? 18 : 14,
-                ),
-                TabsWidget(
-                  text: 'All news',
-                  color: newsType == NewsType.allNews
-                      ? Theme.of(context).cardColor
-                      : Colors.transparent,
-                  function: () {
-                    if (newsType == NewsType.allNews) {
-                      return;
-                    }
-                    setState(() {
-                      newsType = NewsType.allNews;
-                    });
-                  },
-                  fontSize: newsType == NewsType.allNews ? 18 : 14,
-                ),
-                const SizedBox(
-                  width: 25,
-                ),
-              ],
-            ),
-            const VerticalSpacing(10),
-            newsType == NewsType.topTrending
-                ? Container()
-                : SizedBox(
-                    height: kBottomNavigationBarHeight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        paginationButtons(
-                          text: "Prev",
-                          function: () {
-                            if (currentPageIndex == 0) {
-                              return;
-                            }
-                            setState(() {
-                              currentPageIndex -= 1;
-                            });
-                          },
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: ListView.builder(
-                              itemCount: 5,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: ((context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Material(
-                                    color: currentPageIndex == index
-                                        ? Colors.blue
-                                        : Theme.of(context).cardColor,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          currentPageIndex = index;
-                                        });
-                                      },
-                                      child: Center(
-                                          child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text("${index + 1}"),
-                                      )),
-                                    ),
-                                  ),
-                                );
-                              })),
-                        ),
-                        paginationButtons(
-                          text: "Next",
-                          function: () {
-                            if (currentPageIndex == 4) {
-                              return;
-                            }
-                            setState(() {
-                              currentPageIndex += 1;
-                            });
-                            // print('$currentPageIndex index');
-                          },
-                        ),
-                      ],
+          //top trening
+          Padding(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+            child: Text("Top Trending",
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                )),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          // getFeature(),
+          FutureBuilder<List<NewsModel>>(
+              future: newsProvider.fetchTopHeadlines(),
+              builder: ((context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container(
+                    height: size.height * 0.36,
+                    child: TopTrendingLoadingWidget(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Expanded(
+                    child: EmptyNewsWidget(
+                      text: "an error occured ${snapshot.error}",
+                      imagePath: 'assets/images/no_news.png',
                     ),
-                  ),
-            const VerticalSpacing(10),
-            newsType == NewsType.topTrending
-                ? Container()
-                : Align(
-                    alignment: Alignment.topRight,
-                    child: Material(
-                      color: Theme.of(context).cardColor,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: DropdownButton(
-                            value: sortBy,
-                            items: dropDownItems,
-                            onChanged: (String? value) {
-                              setState(() {
-                                sortBy = value!;
-                              });
-                            }),
-                      ),
+                  );
+                } else if (snapshot.data == null) {
+                  return const Expanded(
+                    child: EmptyNewsWidget(
+                      text: "No news found",
+                      imagePath: 'assets/images/no_news.png',
                     ),
-                  ),
-            FutureBuilder<List<NewsModel>>(
-                future: newsType == NewsType.topTrending
-                    ? newsProvider.fetchTopHeadlines()
-                    : newsProvider.fetchAllNews(
-                        pageIndex: currentPageIndex + 1, sortBy: sortBy),
-                builder: ((context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return newsType == NewsType.allNews
-                        ? LoadingWidget(newsType: newsType)
-                        : SizedBox(
-                            height: size.height * 0.38,
-                            child: Expanded(
-                              child: LoadingWidget(newsType: newsType),
+                  );
+                }
+                return SizedBox(
+                  height: size.height * 0.36,
+                  child: Swiper(
+                    autoplayDelay: 8000,
+                    autoplay: true,
+                    itemWidth: size.width * 0.9,
+                    layout: SwiperLayout.STACK,
+                    viewportFraction: 0.9,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return ChangeNotifierProvider.value(
+                        value: snapshot.data![index],
+                        child: const TopTrendingWidget(
+                            // url: snapshot.data![index].url,
                             ),
-                          );
-                  } else if (snapshot.hasError) {
-                    return Expanded(
-                      child: EmptyNewsWidget(
-                        text: "an error occured ${snapshot.error}",
-                        imagePath: 'assets/images/no_news.png',
-                      ),
-                    );
-                  } else if (snapshot.data == null) {
-                    return const Expanded(
-                      child: EmptyNewsWidget(
-                        text: "No news found",
-                        imagePath: 'assets/images/no_news.png',
-                      ),
-                    );
-                  }
-                  return newsType == NewsType.allNews
-                      ? Expanded(
-                          child: ListView.builder(
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (ctx, index) {
-                                return ChangeNotifierProvider.value(
-                                  value: snapshot.data![index],
-                                  child: const ArticlesWidget(
-                                      // imageUrl: snapshot.data![index].,
-                                      // dateToShow: snapshot.data![index].dateToShow,
-                                      // readingTime:
-                                      //     snapshot.data![index].readingTimeText,
-                                      // title: snapshot.data![index].title,
-                                      // url: snapshot.data![index].url,
-                                      ),
-                                );
-                              }),
-                        )
-                      : SizedBox(
-                          height: size.height * 0.38,
-                          child: Swiper(
-                            autoplayDelay: 8000,
-                            autoplay: true,
-                            itemWidth: size.width * 0.9,
-                            layout: SwiperLayout.STACK,
-                            viewportFraction: 0.9,
-                            itemCount: 5,
-                            itemBuilder: (context, index) {
-                              return ChangeNotifierProvider.value(
-                                value: snapshot.data![index],
-                                child: const TopTrendingWidget(
-                                    // url: snapshot.data![index].url,
-                                    ),
-                              );
-                            },
-                          ),
-                        );
-                })),
-            //  LoadingWidget(newsType: newsType),
-            //slideron top trening
-            const VerticalSpacing(10),
-            newsType == NewsType.topTrending
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Popular",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                              foregroundColor: Colors.blue),
-                          child: const Text("See All"),
-                        )
-                      ],
+                      );
+                    },
+                  ),
+                );
+              })),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            //margin: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Popular News",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: color),
+                  ),
+                  Text(
+                    "See all",
+                    style: TextStyle(fontSize: 14, color: color),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // popular
+          // get popular,
+          FutureBuilder<List<NewsModel>>(
+              future: newsProvider.fetchTopHeadlines(),
+              builder: ((context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return PopularLoadingWidget();
+                } else if (snapshot.hasError) {
+                  return Expanded(
+                    child: EmptyNewsWidget(
+                      text: "an error occured ${snapshot.error}",
+                      imagePath: 'assets/images/no_news.png',
                     ),
-                  )
-                : SizedBox(),
-            FutureBuilder<List<NewsModel>>(
-                future: newsProvider.fetchTopHeadlines(),
-                builder: ((context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return newsType == NewsType.topTrending
-                        ? PopularLoadingWidget()
-                        : SizedBox();
-                  } else if (snapshot.hasError) {
-                    return Expanded(
-                      child: EmptyNewsWidget(
-                        text: "an error occured ${snapshot.error}",
-                        imagePath: 'assets/images/no_news.png',
-                      ),
-                    );
-                  } else if (snapshot.data == null) {
-                    return const Expanded(
-                      child: EmptyNewsWidget(
-                        text: "No news found",
-                        imagePath: 'assets/images/no_news.png',
-                      ),
-                    );
-                  }
-                  return newsType == NewsType.topTrending
-                      ? Expanded(
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (ctx, index) {
-                                return ChangeNotifierProvider.value(
-                                  value: snapshot.data![index],
-                                  child: const PopularNews(
-                                      // imageUrl: snapshot.data![index].,
-                                      // dateToShow: snapshot.data![index].dateToShow,
-                                      // readingTime:
-                                      //     snapshot.data![index].readingTimeText,
-                                      // title: snapshot.data![index].title,
-                                      // url: snapshot.data![index].url,
-                                      ),
-                                );
-                              }),
-                        )
-                      : SizedBox();
-                }))
-          ]),
-        ),
+                  );
+                } else if (snapshot.data == null) {
+                  return const Expanded(
+                    child: EmptyNewsWidget(
+                      text: "No news found",
+                      imagePath: 'assets/images/no_news.png',
+                    ),
+                  );
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(left: 5, right: 10),
+                  child: SizedBox(
+                    height: 220,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (ctx, index) {
+                          return ChangeNotifierProvider.value(
+                            value: snapshot.data![index],
+                            child: const PopularNews(),
+                          );
+                        }),
+                  ),
+                );
+              }))
+        ],
       ),
     );
   }
+
+  // //build body
+  // buildBody(BuildContext context, Size size, NewsProvider newsProvider) {
+  //   return SingleChildScrollView(
+  //     child: Padding(
+  //       padding: const EdgeInsets.only(top: 10, bottom: 10),
+  //       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+  //         getCategories(),
+  //         const SizedBox(
+  //           height: 15,
+  //         ),
+  //         const Padding(
+  //           padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+  //           child: Text("Featured",
+  //               style: TextStyle(
+  //                 color: textColor,
+  //                 fontWeight: FontWeight.w600,
+  //                 fontSize: 24,
+  //               )),
+  //         ),
+  //         //getFeature(),
+  //         FutureBuilder<List<NewsModel>>(
+  //             future: newsProvider.fetchTopHeadlines(),
+  //             builder: ((context, snapshot) {
+  //               if (snapshot.connectionState == ConnectionState.waiting) {
+  //                 return const Expanded(
+  //                   child: TopTrendingLoadingWidget(),
+  //                 );
+  //               } else if (snapshot.hasError) {
+  //                 return Expanded(
+  //                   child: EmptyNewsWidget(
+  //                     text: "an error occured ${snapshot.error}",
+  //                     imagePath: 'assets/images/no_news.png',
+  //                   ),
+  //                 );
+  //               } else if (snapshot.data == null) {
+  //                 return const Expanded(
+  //                   child: EmptyNewsWidget(
+  //                     text: "No news found",
+  //                     imagePath: 'assets/images/no_news.png',
+  //                   ),
+  //                 );
+  //               }
+  //               return SizedBox(
+  //                 height: size.height * 0.5,
+  //                 child: Swiper(
+  //                   autoplayDelay: 8000,
+  //                   autoplay: true,
+  //                   itemWidth: size.width * 0.9,
+  //                   layout: SwiperLayout.STACK,
+  //                   viewportFraction: 0.9,
+  //                   itemCount: 5,
+  //                   itemBuilder: (context, index) {
+  //                     return ChangeNotifierProvider.value(
+  //                       value: snapshot.data![index],
+  //                       child: const TopTrendingWidget(
+  //                           // url: snapshot.data![index].url,
+  //                           ),
+  //                     );
+  //                   },
+  //                 ),
+  //               );
+  //             })),
+  //         const SizedBox(
+  //           height: 15,
+  //         ),
+  //         Container(
+  //           margin: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: const [
+  //               Text(
+  //                 "Popular News",
+  //                 style: TextStyle(
+  //                     fontSize: 22,
+  //                     fontWeight: FontWeight.w600,
+  //                     color: textColor),
+  //               ),
+  //               Text(
+  //                 "See all",
+  //                 style: TextStyle(fontSize: 14, color: darker),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         // get popular,
+  //         FutureBuilder<List<NewsModel>>(
+  //             future: newsProvider.fetchTopHeadlines(),
+  //             builder: ((context, snapshot) {
+  //               if (snapshot.connectionState == ConnectionState.waiting) {
+  //                 return const Expanded(
+  //                   child: PopularLoadingWidget(),
+  //                 );
+  //               } else if (snapshot.hasError) {
+  //                 return Expanded(
+  //                   child: EmptyNewsWidget(
+  //                     text: "an error occured ${snapshot.error}",
+  //                     imagePath: 'assets/images/no_news.png',
+  //                   ),
+  //                 );
+  //               } else if (snapshot.data == null) {
+  //                 return const Expanded(
+  //                   child: EmptyNewsWidget(
+  //                     text: "No news found",
+  //                     imagePath: 'assets/images/no_news.png',
+  //                   ),
+  //                 );
+  //               }
+  //               return Expanded(
+  //                 child: ListView.builder(
+  //                     scrollDirection: Axis.horizontal,
+  //                     itemCount: snapshot.data!.length,
+  //                     itemBuilder: (ctx, index) {
+  //                       return ChangeNotifierProvider.value(
+  //                         value: snapshot.data![index],
+  //                         child: const PopularNews(),
+  //                       );
+  //                     }),
+  //               );
+  //             }))
+  //       ]),
+  //     ),
+  //   );
+  // }
+
+  //getcat
+  int selectedCollection = 0;
+  getCategories() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+          children: List.generate(
+              allCategories.length,
+              (index) => Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: CategoryBox(
+                    selectedColor: Colors.white,
+                    data: allCategories[index],
+                    onTap: () {
+                      setState(() {
+                        selectedCollection = index;
+                      });
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => pages[index],
+                        ),
+                      );
+                    },
+                  )))),
+    );
+  }
+
+  // getFeature() {
+  //   return
+  // }
 
   List<DropdownMenuItem<String>> get dropDownItems {
     List<DropdownMenuItem<String>> menuItem = [

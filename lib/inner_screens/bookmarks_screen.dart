@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/widgets/drawer_widget.dart';
 import 'package:sportsnews/widgets/empty_screen.dart';
+import 'package:sportsnews/widgets/popular_loadingwidget.dart';
 
 import '../consts/vars.dart';
 import '../providers/bookmarks_provider.dart';
@@ -44,7 +45,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                   .fetchBookmarks(),
               builder: ((context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const LoadingWidget(newsType: NewsType.allNews);
+                  return const PopularLoadingWidget();
                 } else if (snapshot.hasError) {
                   return Expanded(
                     child: EmptyNewsWidget(

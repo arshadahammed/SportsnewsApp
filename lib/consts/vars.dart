@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 enum NewsType {
   topTrending,
   allNews,
+  football,
+  cricket,
 }
 
 enum SortByEnum {
