@@ -20,12 +20,20 @@ class AllCategoryNews extends StatefulWidget {
 
 class _AllCategoryNewsState extends State<AllCategoryNews> {
   int currentPageIndex = 0;
-  int perPage = 2;
+  int perPage = 1;
+  int futureBuilderItemCount = 0;
+
+  ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
     Size size = Utils(context).getScreenSize;
     final newsProvider = Provider.of<NewsProvider>(context);
+    int totalItemsListLength = newsProvider.newsList.length;
+
+    int ItemCount = (totalItemsListLength / perPage).ceil();
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: color),
@@ -58,13 +66,21 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                       setState(() {
                         currentPageIndex -= 1;
                       });
+                      _scrollController.animateTo(
+                        currentPageIndex *
+                            MediaQuery.of(context).size.width /
+                            ItemCount, // replace buttonWidth with the actual width of your button
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
                     },
                   ),
                   Flexible(
                     flex: 2,
                     child: ListView.builder(
+                        controller: _scrollController,
                         //should dynamically change item count
-                        itemCount: 5,
+                        itemCount: ItemCount,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: ((context, index) {
                           return Padding(
@@ -78,6 +94,13 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                                   setState(() {
                                     currentPageIndex = index;
                                   });
+                                  _scrollController.animateTo(
+                                    index *
+                                        MediaQuery.of(context).size.width /
+                                        10, // replace buttonWidth with the actual width of your button
+                                    duration: Duration(milliseconds: 500),
+                                    curve: Curves.easeInOut,
+                                  );
                                 },
                                 child: Center(
                                     child: Padding(
@@ -92,14 +115,23 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                   paginationButtons(
                     text: "Next",
                     function: () {
-                      //currentPageIndex + 1) * perPage >= 50
+                      //(currentPageIndex + 1) * perPage >= 50
                       // currentPageIndex == 4
-                      if (currentPageIndex == 4) {
+                      if ((currentPageIndex + 1) * perPage >= 50) {
                         return;
                       }
+
                       setState(() {
                         currentPageIndex += 1;
                       });
+                      _scrollController.animateTo(
+                        currentPageIndex *
+                            MediaQuery.of(context).size.width /
+                            ItemCount, // replace buttonWidth with the actual width of your button
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+
                       // print('$currentPageIndex index');
                     },
                   ),
@@ -130,8 +162,9 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                   }
                   return Expanded(
                     child: ListView.builder(
+                        //(currentPageIndex + 1) * perPage
                         //itemCount: snapshot.data!.length,
-                        itemCount: (currentPageIndex + 1) * perPage,
+                        itemCount: snapshot.data!.length,
                         itemBuilder: (ctx, index) {
                           if (index >= (currentPageIndex * perPage) &&
                               index < ((currentPageIndex + 1) * perPage)) {
