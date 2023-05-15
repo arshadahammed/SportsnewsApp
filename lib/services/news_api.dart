@@ -104,6 +104,116 @@ class NewsAPiServices {
     }
   }
 
+  //football
+  static Future<List<NewsModel>> getFootballNews() async {
+    try {
+      var uri = Uri.parse(BASEURL2);
+      var response = await http.get(uri);
+
+      log('Response status: ${response.statusCode}');
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      List<Map<String, dynamic>> footballArticles = [];
+      if (data['code'] != null) {
+        throw HttpException(data['code']);
+      }
+
+      for (var article in data["articles"]) {
+        if (article['category'] == "football") {
+          footballArticles.add(article);
+          print("length ${footballArticles.length}");
+        }
+      }
+
+      return NewsModel.newsFromSnapshot(footballArticles);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  //cricket
+
+  static Future<List<NewsModel>> getCricketNews() async {
+    try {
+      var uri = Uri.parse(BASEURL2);
+      var response = await http.get(uri);
+
+      log('Response status: ${response.statusCode}');
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      List<Map<String, dynamic>> footballArticles = [];
+      if (data['code'] != null) {
+        throw HttpException(data['code']);
+      }
+
+      for (var article in data["articles"]) {
+        if (article['category'] == "cricket") {
+          footballArticles.add(article);
+          print("length ${footballArticles.length}");
+        }
+      }
+
+      return NewsModel.newsFromSnapshot(footballArticles);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  //tennis
+
+  static Future<List<NewsModel>> getTennisNews() async {
+    try {
+      var uri = Uri.parse(BASEURL2);
+      var response = await http.get(uri);
+
+      log('Response status: ${response.statusCode}');
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      List<Map<String, dynamic>> footballArticles = [];
+      if (data['code'] != null) {
+        throw HttpException(data['code']);
+      }
+
+      for (var article in data["articles"]) {
+        if (article['category'] == "tennis") {
+          footballArticles.add(article);
+          print("length ${footballArticles.length}");
+        }
+      }
+
+      return NewsModel.newsFromSnapshot(footballArticles);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  //other
+  static Future<List<NewsModel>> getOtherNews() async {
+    try {
+      var uri = Uri.parse(BASEURL2);
+      var response = await http.get(uri);
+
+      log('Response status: ${response.statusCode}');
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      List<Map<String, dynamic>> footballArticles = [];
+      if (data['code'] != null) {
+        throw HttpException(data['code']);
+      }
+
+      for (var article in data["articles"]) {
+        if (article['category'] == "others") {
+          footballArticles.add(article);
+          print("length ${footballArticles.length}");
+        }
+      }
+
+      return NewsModel.newsFromSnapshot(footballArticles);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
   //
   static Future<List<NewsModel>> searchNews({required String query}) async {
     try {

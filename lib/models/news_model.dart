@@ -13,6 +13,7 @@ class NewsModel with ChangeNotifier {
       publishedAt,
       dateToShow,
       content,
+      category,
       readingTimeText;
 
   NewsModel({
@@ -27,6 +28,7 @@ class NewsModel with ChangeNotifier {
     required this.content,
     required this.dateToShow,
     required this.readingTimeText,
+    required this.category,
   });
 
   factory NewsModel.fromJson(dynamic json) {
@@ -48,6 +50,7 @@ class NewsModel with ChangeNotifier {
       urlToImage: json["urlToImage"] ??
           "https://techcrunch.com/wp-content/uploads/2022/01/locket-app.jpg?w=1390&crop=1",
       publishedAt: json["publishedAt"] ?? "",
+      category: json["category"] ?? "",
       content: content,
       dateToShow: dateToShow,
       readingTimeText: readingTime(title + description + content).msg,
@@ -72,6 +75,7 @@ class NewsModel with ChangeNotifier {
     data["publishedAt"] = publishedAt;
     data["dateToShow"] = dateToShow;
     data["content"] = content;
+    data["category"] = category;
     data["readingTimeText"] = readingTimeText;
     return data;
   }

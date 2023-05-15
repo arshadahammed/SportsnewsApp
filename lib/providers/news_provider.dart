@@ -21,6 +21,30 @@ class NewsProvider with ChangeNotifier {
     return newsList;
   }
 
+  //football
+  Future<List<NewsModel>> fetchFootballNews() async {
+    newsList = await NewsAPiServices.getFootballNews();
+    return newsList;
+  }
+
+  //cricket
+  Future<List<NewsModel>> fetchCricketNews() async {
+    newsList = await NewsAPiServices.getCricketNews();
+    return newsList;
+  }
+
+  //tennis
+  Future<List<NewsModel>> fetchTennisNews() async {
+    newsList = await NewsAPiServices.getTennisNews();
+    return newsList;
+  }
+
+  //tennis
+  Future<List<NewsModel>> fetchOtherNews() async {
+    newsList = await NewsAPiServices.getOtherNews();
+    return newsList;
+  }
+
   Future<List<NewsModel>> searchNewsProvider({required String query}) async {
     newsList = await NewsAPiServices.searchNews(query: query);
     return newsList;

@@ -20,7 +20,7 @@ class AllCategoryNews extends StatefulWidget {
 
 class _AllCategoryNewsState extends State<AllCategoryNews> {
   int currentPageIndex = 0;
-  int perPage = 1;
+  int perPage = 2;
   int futureBuilderItemCount = 0;
 
   ScrollController _scrollController = ScrollController();
