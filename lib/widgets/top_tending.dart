@@ -44,13 +44,16 @@ class TopTrendingWidget extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 0),
-                child: Text(
-                  newsModelProvider.title,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 14),
-                ),
+                child: Text(newsModelProvider.title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                    style: GoogleFonts.chathura(
+                      textStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        //fontStyle: FontStyle.italic,
+                      ),
+                    )),
               ),
               // Row(
               //   children: [

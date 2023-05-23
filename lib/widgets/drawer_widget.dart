@@ -6,6 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/inner_screens/bookmarks_screen.dart';
+import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
+import 'package:sportsnews/providers/news_provider.dart';
+import 'package:sportsnews/providers/notification_provider.dart';
 import 'package:sportsnews/screens/home_screen.dart';
 import 'package:sportsnews/services/news_api.dart';
 import 'package:sportsnews/widgets/popular_loadingwidget.dart';
@@ -22,8 +25,14 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final newsProvider = Provider.of<NewsProvider>(context);
 
     return Drawer(
       child: Material(
@@ -90,15 +99,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               icon: IconlyBold.home,
               fct: () {
                 //NewsAPiServices.getTopHeadlines();
-
-                // Navigator.pushReplacement(
-                //   context,
-                //   PageTransition(
-                //       type: PageTransitionType.rightToLeft,
-                //       child: const PopularLoadingWidget(),
-                //       inheritTheme: true,
-                //       ctx: context),
-                // );
+                newsProvider.cachedfetchTopTrendingHeadlines();
+                LocalNotifications.showNotification();
               },
             ),
             const Divider(

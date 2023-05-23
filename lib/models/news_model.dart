@@ -14,7 +14,10 @@ class NewsModel with ChangeNotifier {
       dateToShow,
       content,
       category,
-      readingTimeText;
+      readingTimeText,
+      slug,
+      twitter;
+  bool top_trend, popular; 
 
   NewsModel({
     required this.newsId,
@@ -29,6 +32,10 @@ class NewsModel with ChangeNotifier {
     required this.dateToShow,
     required this.readingTimeText,
     required this.category,
+    required this.slug,
+    required this.top_trend,
+    required this.popular,
+    required this.twitter,
   });
 
   factory NewsModel.fromJson(dynamic json) {
@@ -54,6 +61,10 @@ class NewsModel with ChangeNotifier {
       content: content,
       dateToShow: dateToShow,
       readingTimeText: readingTime(title + description + content).msg,
+      popular: json["popular"] ?? "",
+      top_trend: json["top_trend"] ?? "",
+      slug: json["slug"] ?? "",
+      twitter: json["twitter"] ?? "",
     );
   }
 
@@ -77,6 +88,10 @@ class NewsModel with ChangeNotifier {
     data["content"] = content;
     data["category"] = category;
     data["readingTimeText"] = readingTimeText;
+    data["popular"] = popular;
+    data["top_trend"] = top_trend;
+    data["slug"] = slug;
+    data["twitter"] = twitter;
     return data;
   }
 

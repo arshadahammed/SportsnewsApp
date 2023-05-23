@@ -76,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     textInputAction: TextInputAction.search,
                     keyboardType: TextInputType.text,
                     onEditingComplete: () async {
-                      searchList = await newsProvider.searchNewsProvider(
+                      searchList = await newsProvider.searchSlugNewsProvider(
                           query: _searchTextController.text);
                       isSearching = true;
                       focusNode.unfocus();
@@ -125,8 +125,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () async {
-                          searchList = await newsProvider.searchNewsProvider(
-                              query: _searchTextController.text);
+                          searchList =
+                              await newsProvider.searchSlugNewsProvider(
+                                  query: _searchTextController.text);
                           isSearching = true;
                           focusNode.unfocus();
                           _searchTextController.text = searchKeywords[index];

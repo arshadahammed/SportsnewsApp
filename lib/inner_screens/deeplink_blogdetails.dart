@@ -15,36 +15,37 @@ import '../services/global_methods.dart';
 import '../services/utils.dart';
 import '../widgets/vertical_spacing.dart';
 
-class NewsDetailsScreen extends StatefulWidget {
-  static const routeName = "/NewsDetailsScreen";
-  const NewsDetailsScreen({Key? key}) : super(key: key);
+class DeepLinkNewsDetailsScreen extends StatefulWidget {
+  static const routeName = "/DeepLinkNewsDetailsScreen";
+  const DeepLinkNewsDetailsScreen({Key? key}) : super(key: key);
 
   @override
-  State<NewsDetailsScreen> createState() => _NewsDetailsScreenState();
+  State<DeepLinkNewsDetailsScreen> createState() =>
+      _DeepLinkNewsDetailsScreenState();
 }
 
-class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
+class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
   bool isInBookmark = false;
   String? publishedAt;
-  //String? newsId;
+  String? newsId;
   dynamic currBookmark;
   @override
   void didChangeDependencies() {
     publishedAt = ModalRoute.of(context)!.settings.arguments as String;
-    //newsId = ModalRoute.of(context)!.settings.arguments as String;
-    // final List<BookmarksModel> bookmarkList =
-    //     Provider.of<BookmarksProvider>(context).getBookmarkList;
-    // if (bookmarkList.isEmpty) {
-    //   return;
-    // }
-    // currBookmark = bookmarkList
-    //     .where((element) => element.publishedAt == publishedAt)
-    //     .toList();
-    // if (currBookmark.isEmpty) {
-    //   isInBookmark = false;
-    // } else {
-    //   isInBookmark = true;
-    // }
+    newsId = ModalRoute.of(context)!.settings.arguments as String;
+    final List<BookmarksModel> bookmarkList =
+        Provider.of<BookmarksProvider>(context).getBookmarkList;
+    if (bookmarkList.isEmpty) {
+      return;
+    }
+    currBookmark = bookmarkList
+        .where((element) => element.publishedAt == publishedAt)
+        .toList();
+    if (currBookmark.isEmpty) {
+      isInBookmark = false;
+    } else {
+      isInBookmark = true;
+    }
     super.didChangeDependencies();
   }
 
@@ -54,7 +55,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
     final newsProvider = Provider.of<NewsProvider>(context);
     final bookmarksProvider = Provider.of<BookmarksProvider>(context);
 
-    final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
+    final currentNews = newsProvider.findById(id: newsId);
 
     // final currentNews = newsId == null
     //   ? newsProvider.findByDate(publishedAt: publishedAt)
@@ -66,7 +67,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Text(
-          //"By ${currentNews.authorName}",
           "By ${currentNews.newsId}",
           textAlign: TextAlign.center,
           style: TextStyle(color: color),
@@ -90,16 +90,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
               children: [
                 Text(
                   currentNews.title,
-                  textAlign: TextAlign.start,
-                  style: GoogleFonts.chathura(
-                    //wordSpacing: 5,
-                    //letterSpacing: 2,
-                    textStyle: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      //fontStyle: FontStyle.italic,
-                    ),
-                  ),
+                  textAlign: TextAlign.justify,
+                  style: titleTextStyle,
                 ),
                 const VerticalSpacing(25),
                 Row(
@@ -152,7 +144,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                 await FirebaseDynamicLinkService
                                     .createDynamicLink(false, currentNews);
                             print(generatedDeepLink);
-                            print(currentNews.newsId);
                             await Share.share(generatedDeepLink,
                                 subject: 'Look what I made!');
                           } catch (err) {
@@ -218,7 +209,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   fontWeight: FontWeight.bold,
                 ),
                 const VerticalSpacing(10),
-                TextDescription(
+                TextContent(
                   label: currentNews.description,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -248,29 +239,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   }
 }
 
-class TextDescription extends StatelessWidget {
-  const TextDescription({
-    Key? key,
-    required this.label,
-    required this.fontSize,
-    required this.fontWeight,
-  }) : super(key: key);
-
-  final String label;
-  final double fontSize;
-  final FontWeight fontWeight;
-  @override
-  Widget build(BuildContext context) {
-    return SelectableText(
-      label,
-      textAlign: TextAlign.center,
-      style: GoogleFonts.roboto(fontSize: fontSize, fontWeight: fontWeight),
-    );
-  }
-
-  //content
-}
-
 class TextContent extends StatelessWidget {
   const TextContent({
     Key? key,
@@ -286,10 +254,8 @@ class TextContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SelectableText(
       label,
-      textAlign: TextAlign.start,
+      textAlign: TextAlign.justify,
       style: GoogleFonts.roboto(fontSize: fontSize, fontWeight: fontWeight),
     );
   }
-
-  //content
 }

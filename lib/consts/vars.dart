@@ -15,13 +15,14 @@ enum SortByEnum {
 }
 
 const List<String> searchKeywords = [
-  "Football",
-  "Flutter",
-  "Python",
-  "Weather",
-  "Crypto",
-  "Bitcoin",
-  "Youtube",
-  "Netflix",
-  "Meta"
+  "football",
+  "cricket",
+  "tennis",
+  "messi",
+  "ipl",
+  "argentina",
+  "brazil",
+  "ronaldo",
+  "fifa",
+  "icc",
 ];

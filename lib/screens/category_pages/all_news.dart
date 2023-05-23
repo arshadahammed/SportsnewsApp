@@ -20,7 +20,7 @@ class AllCategoryNews extends StatefulWidget {
 
 class _AllCategoryNewsState extends State<AllCategoryNews> {
   int currentPageIndex = 0;
-  int perPage = 2;
+  int perPage = 3;
   int futureBuilderItemCount = 0;
 
   ScrollController _scrollController = ScrollController();
@@ -35,18 +35,18 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
     int ItemCount = (totalItemsListLength / perPage).ceil();
 
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: color),
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        centerTitle: true,
-        title: Text(
-          'All News',
-          style: GoogleFonts.lobster(
-              textStyle:
-                  TextStyle(color: color, fontSize: 20, letterSpacing: 0.6)),
-        ),
-      ),
+      // appBar: AppBar(
+      //   iconTheme: IconThemeData(color: color),
+      //   elevation: 0,
+      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      //   centerTitle: true,
+      //   title: Text(
+      //     'All News',
+      //     style: GoogleFonts.lobster(
+      //         textStyle:
+      //             TextStyle(color: color, fontSize: 20, letterSpacing: 0.6)),
+      //   ),
+      // ),
       body: Padding(
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: Column(
@@ -141,7 +141,7 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
             const VerticalSpacing(10),
             //futureBuilder
             FutureBuilder<List<NewsModel>>(
-                future: newsProvider.fetchTopHeadlines(),
+                future: newsProvider.cachedfetchTopTrendingHeadlines(),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const ListViewLoadingWidget();

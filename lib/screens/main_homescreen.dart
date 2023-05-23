@@ -1,12 +1,17 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'dart:developer';
 
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sportsnews/inner_screens/search_screen.dart';
+import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/screens/account.dart';
 import 'package:sportsnews/screens/all_news.dart';
+import 'package:sportsnews/screens/category_pages/all_news.dart';
 import 'package:sportsnews/screens/favourite.dart';
 import 'package:sportsnews/screens/home_screen.dart';
 import 'package:sportsnews/services/utils.dart';
@@ -30,7 +35,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
   //bool isPaused = false;
   List<Widget> widgetList = const [
     HomeScreen(),
-    AllNews(),
+    AllCategoryNews(),
     FavouriteNews(),
     AccountPage(),
   ];
@@ -38,6 +43,10 @@ class _MainHomeScreenState extends State<MainHomeScreen>
   @override
   void initState() {
     super.initState();
+    handleInitialLink();
+    initDynamicLinks(context);
+
+    //FirebaseDynamicLinkService.initDynamicLinks(   context);
     // appOpenAdManager.loadAd();
     // WidgetsBinding.instance.addObserver(this);
     // _pageController = PageController();
@@ -62,6 +71,47 @@ class _MainHomeScreenState extends State<MainHomeScreen>
   //     isPaused = false;
   //   }
   // }
+
+  // deeplink
+
+  // Get any initial links
+
+  Future<void> initDynamicLinks(BuildContext context) async {
+    // await Future.delayed(Duration(seconds: 1));
+    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+      final Uri deepLink = dynamicLinkData.link;
+      if (deepLink != null) {
+        handleDeepLink(deepLink);
+      }
+    }).onError((error) {
+      print('onLink error');
+      print(error.message);
+    });
+  }
+
+  //initial
+  Future<void> handleInitialLink() async {
+    await Future.delayed(Duration(seconds: 1));
+    final PendingDynamicLinkData? initialLink =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    final Uri deepLink = initialLink!.link;
+    if (deepLink != null) {
+      handleDeepLink(deepLink);
+    }
+  }
+
+  //handle deep link
+  void handleDeepLink(Uri deepLink) {
+    final List<String> pathSegments = deepLink.pathSegments;
+    if (pathSegments.isNotEmpty && pathSegments.first == 'sportsNews') {
+      final String newsId = pathSegments.last;
+
+      // Navigate to the news article page using the newsId
+      print('Navigating to news article with ID: $newsId');
+      Navigator.pushNamed(context, DeepLinkNewsDetailsScreen.routeName,
+          arguments: newsId);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +201,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                 BottomNavigationBarItem(
                     icon: Icon(Icons.person),
                     label: 'Account',
-                    backgroundColor: Colors.yellowAccent),
+                    backgroundColor: Color.fromARGB(255, 173, 173, 169)),
               ])),
     );
   }

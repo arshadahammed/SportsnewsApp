@@ -47,11 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
   String sortBy = SortByEnum.publishedAt.name;
   final pages = [
-    AllCategoryNews(),
     FootballNews(),
     CricketNews(),
     TennisNews(),
     OtherNews(),
+    //TestDart(),
   ];
 
   @override
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           // getFeature(),
           FutureBuilder<List<NewsModel>>(
-              future: newsProvider.fetchTopHeadlines(),
+              future: newsProvider.cachedfetchTopTrendingHeadlines(),
               builder: ((context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Container(
@@ -184,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // popular
           // get popular,
           FutureBuilder<List<NewsModel>>(
-              future: newsProvider.fetchTopHeadlines(),
+              future: newsProvider.cachedfetchPopularNews(),
               builder: ((context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return PopularLoadingWidget();
