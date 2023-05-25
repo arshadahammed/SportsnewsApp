@@ -246,29 +246,29 @@ class NewsAPiServices {
     }
   }
 
-  static Future<List<BookmarksModel>?> getBookmarks() async {
-    try {
-      var uri = Uri.https(BASEURL_FIREBASE, "bookmarks.json");
-      var response = await http.get(
-        uri,
-      );
-      // log('Response status: ${response.statusCode}');
-      // log('Response body: ${response.body}');
+  // static Future<List<BookmarksModel>?> getBookmarks() async {
+  //   try {
+  //     var uri = Uri.https(BASEURL_FIREBASE, "bookmarks.json");
+  //     var response = await http.get(
+  //       uri,
+  //     );
+  //     // log('Response status: ${response.statusCode}');
+  //     // log('Response body: ${response.body}');
 
-      Map data = jsonDecode(response.body);
-      List allKeys = [];
+  //     Map data = jsonDecode(response.body);
+  //     List allKeys = [];
 
-      if (data['code'] != null) {
-        throw HttpException(data['code']);
-        // throw data['message'];
-      }
-      for (String key in data.keys) {
-        allKeys.add(key);
-      }
-      log("allKeys $allKeys");
-      return BookmarksModel.bookmarksFromSnapshot(json: data, allKeys: allKeys);
-    } catch (error) {
-      rethrow;
-    }
-  }
+  //     if (data['code'] != null) {
+  //       throw HttpException(data['code']);
+  //       // throw data['message'];
+  //     }
+  //     for (String key in data.keys) {
+  //       allKeys.add(key);
+  //     }
+  //     log("allKeys $allKeys");
+  //     return BookmarksModel.bookmarksFromSnapshot(json: data, allKeys: allKeys);
+  //   } catch (error) {
+  //     rethrow;
+  //   }
+  // }
 }

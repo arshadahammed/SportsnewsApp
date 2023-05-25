@@ -24,7 +24,6 @@ class _ListViewLoadingWidgetState extends State<ListViewLoadingWidget> {
     baseShimmerColor = utils.baseShimmerColor;
     highlightShimmerColor = utils.highlightShimmerColor;
     widgetShimmerColor = utils.widgetShimmerColor;
-    Provider.of<BookmarksProvider>(context, listen: false).fetchBookmarks();
     super.didChangeDependencies();
   }
 

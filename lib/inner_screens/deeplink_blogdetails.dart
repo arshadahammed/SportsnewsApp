@@ -33,19 +33,19 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
   void didChangeDependencies() {
     publishedAt = ModalRoute.of(context)!.settings.arguments as String;
     newsId = ModalRoute.of(context)!.settings.arguments as String;
-    final List<BookmarksModel> bookmarkList =
-        Provider.of<BookmarksProvider>(context).getBookmarkList;
-    if (bookmarkList.isEmpty) {
-      return;
-    }
-    currBookmark = bookmarkList
-        .where((element) => element.publishedAt == publishedAt)
-        .toList();
-    if (currBookmark.isEmpty) {
-      isInBookmark = false;
-    } else {
-      isInBookmark = true;
-    }
+    // final List<BookmarksModel> bookmarkList =
+    //     Provider.of<BookmarksProvider>(context).getBookmarkList;
+    // if (bookmarkList.isEmpty) {
+    //   return;
+    // }
+    // currBookmark = bookmarkList
+    //     .where((element) => element.publishedAt == publishedAt)
+    //     .toList();
+    // if (currBookmark.isEmpty) {
+    //   isInBookmark = false;
+    // } else {
+    //   isInBookmark = true;
+    // }
     super.didChangeDependencies();
   }
 
@@ -53,7 +53,7 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
   Widget build(BuildContext context) {
     final color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
-    final bookmarksProvider = Provider.of<BookmarksProvider>(context);
+    //final bookmarksProvider = Provider.of<BookmarksProvider>(context);
 
     final currentNews = newsProvider.findById(id: newsId);
 
@@ -166,15 +166,7 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (isInBookmark) {
-                            await bookmarksProvider.deleteBookmark(
-                                key: currBookmark[0].bookmarkKey);
-                          } else {
-                            await bookmarksProvider.addToBookmark(
-                              newsModel: currentNews,
-                            );
-                          }
-                          await bookmarksProvider.fetchBookmarks();
+                         
                         },
                         child: Card(
                           elevation: 10,

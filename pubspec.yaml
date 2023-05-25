@@ -48,7 +48,7 @@ dependencies:
 
     # Management
   provider: ^6.0.3
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.1.1
   intl: ^0.17.0
   
   # Social
@@ -65,6 +65,7 @@ dependencies:
   permission_handler: ^10.2.0
   dio_http_cache: ^0.3.0
   dio: ^4.0.6
+  collection: ^1.17.0
 
 
 dev_dependencies:

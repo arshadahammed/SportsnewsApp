@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:flutter/services.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -53,13 +53,28 @@ class _HomeScreenState extends State<HomeScreen> {
     OtherNews(),
     //TestDart(),
   ];
+  void getCachedData() async {
+    Provider.of<NewsProvider>(context).cachedfetchTopTrendingHeadlines();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // getCachedData();
+    //Provider.of<NewsProvider>(context).cachedfetchTopTrendingHeadlines();
+  }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Theme.of(context).scaffoldBackgroundColor));
     Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
     return Scaffold(
+      //Theme.of(context).scaffoldBackgroundColor));
       // resizeToAvoidBottomInset: true,
       // appBar: AppBar(
       //   iconTheme: IconThemeData(color: color),
@@ -122,10 +137,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: TopTrendingLoadingWidget(),
                   );
                 } else if (snapshot.hasError) {
-                  return Expanded(
-                    child: EmptyNewsWidget(
-                      text: "an error occured ${snapshot.error}",
-                      imagePath: 'assets/images/no_news.png',
+                  return Container(
+                    height: 100,
+                    width: 100,
+                    child: Expanded(
+                      child: EmptyNewsWidget(
+                        text: "an error occured ${snapshot.error}",
+                        imagePath: 'assets/images/no_news.png',
+                      ),
                     ),
                   );
                 } else if (snapshot.data == null) {
@@ -189,10 +208,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return PopularLoadingWidget();
                 } else if (snapshot.hasError) {
-                  return Expanded(
-                    child: EmptyNewsWidget(
-                      text: "an error occured ${snapshot.error}",
-                      imagePath: 'assets/images/no_news.png',
+                  return Container(
+                    height: 200,
+                    width: 150,
+                    child: Expanded(
+                      child: EmptyNewsWidget(
+                        text: "an error occured ${snapshot.error}",
+                        imagePath: 'assets/images/no_news.png',
+                      ),
                     ),
                   );
                 } else if (snapshot.data == null) {

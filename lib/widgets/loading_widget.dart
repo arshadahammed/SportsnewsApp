@@ -25,7 +25,6 @@ class _LoadingWidgetState extends State<LoadingWidget> {
     baseShimmerColor = utils.baseShimmerColor;
     highlightShimmerColor = utils.highlightShimmerColor;
     widgetShimmerColor = utils.widgetShimmerColor;
-    Provider.of<BookmarksProvider>(context, listen: false).fetchBookmarks();
     super.didChangeDependencies();
   }
 

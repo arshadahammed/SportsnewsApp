@@ -2,6 +2,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/inner_screens/blog_details.dart';
 import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
@@ -9,6 +10,7 @@ import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/providers/news_provider.dart';
 import 'package:sportsnews/providers/notification_provider.dart';
 import 'package:sportsnews/screens/main_homescreen.dart';
+import 'package:sportsnews/services/utils.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -26,6 +28,8 @@ import 'providers/theme_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   //tz.initializeTimeZones();
 
   runApp(MyApp());
@@ -45,6 +49,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     getCurrentAppTheme();
+    //getCachedData();
     super.initState();
     LocalNotifications.sendSheduledNotification(
         "Check Sports Caster ", "New Sports news added");
@@ -54,6 +59,16 @@ class _MyAppState extends State<MyApp> {
   void getCurrentAppTheme() async {
     themeChangeProvider.setDarkTheme =
         await themeChangeProvider.darkThemePreferences.getTheme();
+  }
+
+  // Color getCurrentCOlor() {
+  //   final Color color = Utils(context).getColor;
+  //   return color;
+  // }
+
+  //fetchDatafromApi and cache it
+  void getCachedData() async {
+    Provider.of<NewsProvider>(context).cachedfetchTopTrendingHeadlines();
   }
 
   @override
@@ -66,9 +81,6 @@ class _MyAppState extends State<MyApp> {
         }),
         ChangeNotifierProvider(
           create: (_) => NewsProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => BookmarksProvider(),
         ),
       ],
       child:

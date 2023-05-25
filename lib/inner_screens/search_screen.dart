@@ -127,11 +127,12 @@ class _SearchScreenState extends State<SearchScreen> {
                         onTap: () async {
                           searchList =
                               await newsProvider.searchSlugNewsProvider(
-                                  query: _searchTextController.text);
+                                  query: _searchTextController.text.trim());
                           isSearching = true;
                           focusNode.unfocus();
-                          _searchTextController.text = searchKeywords[index];
-                          setState(() {});
+                          setState(() {
+                            _searchTextController.text = searchKeywords[index];
+                          });
                         },
                         child: Container(
                             margin: const EdgeInsets.all(4.0),

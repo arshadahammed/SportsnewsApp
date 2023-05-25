@@ -4,6 +4,7 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
@@ -24,35 +25,30 @@ class NewsDetailsScreen extends StatefulWidget {
 }
 
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
-  bool isInBookmark = false;
+  bool _isFavorite = false;
+  List<String> _favoriteIds = [];
+  //bool isInBookmark = false;
   String? publishedAt;
   //String? newsId;
-  dynamic currBookmark;
+  //dynamic currBookmark;
   @override
   void didChangeDependencies() {
     publishedAt = ModalRoute.of(context)!.settings.arguments as String;
-    //newsId = ModalRoute.of(context)!.settings.arguments as String;
-    // final List<BookmarksModel> bookmarkList =
-    //     Provider.of<BookmarksProvider>(context).getBookmarkList;
-    // if (bookmarkList.isEmpty) {
-    //   return;
-    // }
-    // currBookmark = bookmarkList
-    //     .where((element) => element.publishedAt == publishedAt)
-    //     .toList();
-    // if (currBookmark.isEmpty) {
-    //   isInBookmark = false;
-    // } else {
-    //   isInBookmark = true;
-    // }
     super.didChangeDependencies();
+  }
+
+  Future<void> _getFavorites() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _favoriteIds = prefs.getStringList('favoriteIds') ?? [];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
-    final bookmarksProvider = Provider.of<BookmarksProvider>(context);
+    //final bookmarksProvider = Provider.of<BookmarksProvider>(context);
 
     final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
 
@@ -67,7 +63,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         centerTitle: true,
         title: Text(
           //"By ${currentNews.authorName}",
-          "By ${currentNews.newsId}",
+          "By ${currentNews!.newsId}",
           textAlign: TextAlign.center,
           style: TextStyle(color: color),
         ),
@@ -175,15 +171,30 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (isInBookmark) {
-                            await bookmarksProvider.deleteBookmark(
-                                key: currBookmark[0].bookmarkKey);
-                          } else {
-                            await bookmarksProvider.addToBookmark(
-                              newsModel: currentNews,
-                            );
-                          }
-                          await bookmarksProvider.fetchBookmarks();
+                          setState(() {
+                            _isFavorite = !_isFavorite;
+                          });
+                          // await _updateFavorites();
+
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          List<String> favoriteIds =
+                              prefs.getStringList('favoriteIds') ?? [];
+                          setState(() {
+                            if (_favoriteIds.contains(currentNews.newsId)) {
+                              print("Id already exist");
+                              return;
+                            }
+                            if (_isFavorite) {
+                              favoriteIds.add(currentNews.newsId);
+                              print("After added : ${favoriteIds.length}");
+                            } else {
+                              favoriteIds.remove(currentNews.newsId);
+                              //  print("After removed : ${favoriteIds.length}");
+                            }
+                          });
+
+                          await prefs.setStringList('favoriteIds', favoriteIds);
                         },
                         child: Card(
                           elevation: 10,
@@ -191,11 +202,11 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
-                              isInBookmark
+                              _isFavorite
                                   ? IconlyBold.bookmark
                                   : IconlyLight.bookmark,
                               size: 28,
-                              color: isInBookmark ? Colors.green : color,
+                              color: _isFavorite ? Colors.red : color,
                             ),
                           ),
                         ),
@@ -246,6 +257,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
       ),
     );
   }
+
+  //update fav
 }
 
 class TextDescription extends StatelessWidget {

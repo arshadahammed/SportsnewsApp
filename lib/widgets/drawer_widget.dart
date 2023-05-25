@@ -9,6 +9,7 @@ import 'package:sportsnews/inner_screens/bookmarks_screen.dart';
 import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
 import 'package:sportsnews/providers/news_provider.dart';
 import 'package:sportsnews/providers/notification_provider.dart';
+import 'package:sportsnews/screens/favourite.dart';
 import 'package:sportsnews/screens/home_screen.dart';
 import 'package:sportsnews/services/news_api.dart';
 import 'package:sportsnews/widgets/popular_loadingwidget.dart';
@@ -87,7 +88,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   context,
                   PageTransition(
                       type: PageTransitionType.rightToLeft,
-                      child: const BookmarkScreen(),
+                      child: const FavouriteNews(),
                       inheritTheme: true,
                       ctx: context),
                 );
@@ -99,8 +100,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               icon: IconlyBold.home,
               fct: () {
                 //NewsAPiServices.getTopHeadlines();
-                newsProvider.cachedfetchTopTrendingHeadlines();
-                LocalNotifications.showNotification();
+                newsProvider.cachedfetchFavouriteNews();
+                //LocalNotifications.showNotification();
               },
             ),
             const Divider(

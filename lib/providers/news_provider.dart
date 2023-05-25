@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/services/cached_news_api.dart';
 import 'package:sportsnews/services/news_api.dart';
+import 'package:collection/collection.dart';
 
 class NewsProvider with ChangeNotifier {
   List<NewsModel> newsList = [];
@@ -31,7 +32,12 @@ class NewsProvider with ChangeNotifier {
     newsList = await CachedNewsAPiServices.getTopHeadlines();
     log("newsid of item 2");
     //log(newsList[5].newsId);
-    return newsList;
+    return newsList.reversed.toList();
+  }
+
+  //cached
+  Future<List<NewsModel>> cachedfetchTopTrendingHeadlines2() async {
+    return getNewsList;
   }
 
   //popular
@@ -39,7 +45,15 @@ class NewsProvider with ChangeNotifier {
     newsList = await CachedNewsAPiServices.getpopularNews();
     log("newsid of item 2");
     //log(newsList[5].newsId);
-    return newsList;
+    return newsList.reversed.toList();
+  }
+
+  //favr
+  Future<List<NewsModel>> cachedfetchFavouriteNews() async {
+    newsList = await CachedNewsAPiServices.getFavNews();
+    //log("Get fav started ..............");
+    //log(newsList[5].newsId);
+    return newsList.reversed.toList();
   }
 
   //football
@@ -78,15 +92,29 @@ class NewsProvider with ChangeNotifier {
     return newsList;
   }
 
-  NewsModel findByDate({required String? publishedAt}) {
-    return newsList
-        .firstWhere((newsModel) => newsModel.publishedAt == publishedAt);
-  }
+  // NewsModel findByDate({required String? publishedAt}) {
+  //   return newsList
+  //       .firstWhere((newsModel) => newsModel.publishedAt == publishedAt);
+  // }
 
   NewsModel findByDate2({required String? publishedAt}) {
     return newsList
         .firstWhere((newsModel) => newsModel.publishedAt == publishedAt);
   }
+
+  NewsModel findByDate({required String? publishedAt}) {
+    final formattedPublishedAt = publishedAt!.substring(0, 19);
+    return newsList.firstWhere(
+        (newsModel) => newsModel.publishedAt.startsWith(formattedPublishedAt));
+  }
+
+  // NewsModel findByDate({required String publishedAt}) {
+  //   for (var newsModel in newsList) {
+  //     if (newsModel.publishedAt == publishedAt) {
+  //       return newsModel;
+  //     }
+  //   }
+  // }
 
   //findy=byID
   NewsModel findById({required String? id}) {
