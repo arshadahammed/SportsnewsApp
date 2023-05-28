@@ -4,9 +4,14 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
+import 'package:sportsnews/providers/all_news_provider.dart';
+import 'package:sportsnews/providers/cricket_news_provider.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
+import 'package:sportsnews/providers/football_news_provider.dart';
+import 'package:sportsnews/providers/popular_news_provider.dart';
 
 import '../consts/styles.dart';
 import '../providers/bookmarks_provider.dart';
@@ -15,48 +20,48 @@ import '../services/global_methods.dart';
 import '../services/utils.dart';
 import '../widgets/vertical_spacing.dart';
 
-class DeepLinkNewsDetailsScreen extends StatefulWidget {
-  static const routeName = "/DeepLinkNewsDetailsScreen";
-  const DeepLinkNewsDetailsScreen({Key? key}) : super(key: key);
+class CricketNewsDetails extends StatefulWidget {
+  static const routeName = "/CricketNewsDetails";
+  const CricketNewsDetails({Key? key}) : super(key: key);
 
   @override
-  State<DeepLinkNewsDetailsScreen> createState() =>
-      _DeepLinkNewsDetailsScreenState();
+  State<CricketNewsDetails> createState() => _CricketNewsDetailsState();
 }
 
-class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
-  bool isInBookmark = false;
-  String? publishedAt;
-  String? newsId;
-  dynamic currBookmark;
+class _CricketNewsDetailsState extends State<CricketNewsDetails> {
+  bool _isFavorite = false;
+  List<String> _favoriteIds = [];
+  //bool isInBookmark = false;
+  //String? publishedAt;
+  //String? newsId;
+  //dynamic currBookmark;
   @override
-  void didChangeDependencies() {
-    publishedAt = ModalRoute.of(context)!.settings.arguments as String;
-    newsId = ModalRoute.of(context)!.settings.arguments as String;
-    // final List<BookmarksModel> bookmarkList =
-    //     Provider.of<BookmarksProvider>(context).getBookmarkList;
-    // if (bookmarkList.isEmpty) {
-    //   return;
-    // }
-    // currBookmark = bookmarkList
-    //     .where((element) => element.publishedAt == publishedAt)
-    //     .toList();
-    // if (currBookmark.isEmpty) {
-    //   isInBookmark = false;
-    // } else {
-    //   isInBookmark = true;
-    // }
-    super.didChangeDependencies();
+  // void didChangeDependencies() {
+  //   publishedAt = ModalRoute.of(context)!.settings.arguments as String;
+  //   super.didChangeDependencies();
+  // }
+
+  Future<void> _getFavorites() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _favoriteIds = prefs.getStringList('favoriteIds') ?? [];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final color = Utils(context).getColor;
-    final newsProvider = Provider.of<NewsProvider>(context);
-    //final bookmarksProvider = Provider.of<BookmarksProvider>(context);
+    // final Map<String, dynamic> args =
+    //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
-    final currentNews =
-        newsProvider.findById(id: newsId);
+    // String argumentID = args['argumentID'];
+    // String argumentDate = args['argumentDate'];
+    // //
+    final color = Utils(context).getColor;
+    final cricketNewsProvider = Provider.of<CricketNewsProvider>(context);
+    //final publishedAt = ModalRoute.of(context)!.settings.arguments as String;
+    //final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
+    final newsId = ModalRoute.of(context)!.settings.arguments as String;
+    final currentNews = cricketNewsProvider.findById(id: newsId);
 
     // final currentNews = newsId == null
     //   ? newsProvider.findByDate(publishedAt: publishedAt)
@@ -68,6 +73,7 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Text(
+          //"By ${currentNews.authorName}",
           "By ${currentNews.newsId}",
           textAlign: TextAlign.center,
           style: TextStyle(color: color),
@@ -91,8 +97,16 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
               children: [
                 Text(
                   currentNews.title,
-                  textAlign: TextAlign.justify,
-                  style: titleTextStyle,
+                  textAlign: TextAlign.start,
+                  style: GoogleFonts.chathura(
+                    //wordSpacing: 5,
+                    //letterSpacing: 2,
+                    textStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      //fontStyle: FontStyle.italic,
+                    ),
+                  ),
                 ),
                 const VerticalSpacing(25),
                 Row(
@@ -145,6 +159,7 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
                                 await FirebaseDynamicLinkService
                                     .createDynamicLink(false, currentNews);
                             print(generatedDeepLink);
+                            print(currentNews.newsId);
                             await Share.share(generatedDeepLink,
                                 subject: 'Look what I made!');
                           } catch (err) {
@@ -166,18 +181,43 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () async {},
+                        onTap: () async {
+                          setState(() {
+                            _isFavorite = !_isFavorite;
+                          });
+                          // await _updateFavorites();
+
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          List<String> favoriteIds =
+                              prefs.getStringList('favoriteIds') ?? [];
+                          setState(() {
+                            if (_favoriteIds.contains(currentNews.newsId)) {
+                              print("Id already exist");
+                              return;
+                            }
+                            if (_isFavorite) {
+                              favoriteIds.add(currentNews.newsId);
+                              print("After added : ${favoriteIds.length}");
+                            } else {
+                              favoriteIds.remove(currentNews.newsId);
+                              //  print("After removed : ${favoriteIds.length}");
+                            }
+                          });
+
+                          await prefs.setStringList('favoriteIds', favoriteIds);
+                        },
                         child: Card(
                           elevation: 10,
                           shape: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
-                              isInBookmark
+                              _isFavorite
                                   ? IconlyBold.bookmark
                                   : IconlyLight.bookmark,
                               size: 28,
-                              color: isInBookmark ? Colors.green : color,
+                              color: _isFavorite ? Colors.red : color,
                             ),
                           ),
                         ),
@@ -200,7 +240,7 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
                   fontWeight: FontWeight.bold,
                 ),
                 const VerticalSpacing(10),
-                TextContent(
+                TextDescription(
                   label: currentNews.description,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -228,6 +268,31 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
       ),
     );
   }
+
+  //update fav
+}
+
+class TextDescription extends StatelessWidget {
+  const TextDescription({
+    Key? key,
+    required this.label,
+    required this.fontSize,
+    required this.fontWeight,
+  }) : super(key: key);
+
+  final String label;
+  final double fontSize;
+  final FontWeight fontWeight;
+  @override
+  Widget build(BuildContext context) {
+    return SelectableText(
+      label,
+      textAlign: TextAlign.center,
+      style: GoogleFonts.roboto(fontSize: fontSize, fontWeight: fontWeight),
+    );
+  }
+
+  //content
 }
 
 class TextContent extends StatelessWidget {
@@ -245,8 +310,10 @@ class TextContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SelectableText(
       label,
-      textAlign: TextAlign.justify,
+      textAlign: TextAlign.start,
       style: GoogleFonts.roboto(fontSize: fontSize, fontWeight: fontWeight),
     );
   }
+
+  //content
 }

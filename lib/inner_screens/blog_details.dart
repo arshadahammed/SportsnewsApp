@@ -28,12 +28,13 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   bool _isFavorite = false;
   List<String> _favoriteIds = [];
   //bool isInBookmark = false;
-  String? publishedAt;
-  //String? newsId;
+  //String? publishedAt;
+  String? newsId;
   //dynamic currBookmark;
   @override
   void didChangeDependencies() {
-    publishedAt = ModalRoute.of(context)!.settings.arguments as String;
+    newsId = ModalRoute.of(context)!.settings.arguments as String;
+    //Provider.of<NewsProvider>(context, listen: false).newsList.clear();
     super.didChangeDependencies();
   }
 
@@ -46,11 +47,18 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final Map<String, dynamic> args =
+    //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    // String argumentID = args['argumentID'];
+    // String argumentDate = args['argumentDate'];
+    // //
     final color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
-    //final bookmarksProvider = Provider.of<BookmarksProvider>(context);
-
-    final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
+    //final publishedAt = ModalRoute.of(context)!.settings.arguments as String;
+    //final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
+    //final newsId = ModalRoute.of(context)!.settings.arguments as String;
+    final currentNews = newsProvider.findById(id: newsId);
 
     // final currentNews = newsId == null
     //   ? newsProvider.findByDate(publishedAt: publishedAt)
@@ -63,7 +71,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         centerTitle: true,
         title: Text(
           //"By ${currentNews.authorName}",
-          "By ${currentNews!.newsId}",
+          "By ${currentNews.newsId}",
           textAlign: TextAlign.center,
           style: TextStyle(color: color),
         ),

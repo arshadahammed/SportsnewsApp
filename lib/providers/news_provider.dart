@@ -13,11 +13,20 @@ class NewsProvider with ChangeNotifier {
     return newsList;
   }
 
-  Future<List<NewsModel>> fetchAllNews(
-      {required int pageIndex, required String sortBy}) async {
-    newsList =
-        await NewsAPiServices.getAllNews(page: pageIndex, sortBy: sortBy);
-    return newsList;
+  // Future<List<NewsModel>> fetchAllNews(
+  //     {required int pageIndex, required String sortBy}) async {
+  //   newsList =
+  //       await NewsAPiServices.getAllNews(page: pageIndex, sortBy: sortBy);
+  //   return newsList;
+  // }
+
+  //allnews
+
+  Future<List<NewsModel>> fetchAllNews() async {
+    newsList = await CachedNewsAPiServices.getAllNews();
+    //log("newsid of item 2");
+    //log(newsList[5].newsId);
+    return newsList.reversed.toList();
   }
 
   Future<List<NewsModel>> fetchTopHeadlines() async {
@@ -100,6 +109,11 @@ class NewsProvider with ChangeNotifier {
   NewsModel findByDate2({required String? publishedAt}) {
     return newsList
         .firstWhere((newsModel) => newsModel.publishedAt == publishedAt);
+  }
+
+  void clearNewsList() {
+    newsList.clear();
+    notifyListeners();
   }
 
   NewsModel findByDate({required String? publishedAt}) {

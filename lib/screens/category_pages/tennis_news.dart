@@ -9,6 +9,7 @@ import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/articles_widget.dart';
 import 'package:sportsnews/widgets/empty_screen.dart';
 import 'package:sportsnews/widgets/listview_loadingwidget.dart';
+import 'package:sportsnews/widgets/tennis_article.widget.dart';
 import 'package:sportsnews/widgets/vertical_spacing.dart';
 
 class TennisNews extends StatefulWidget {
@@ -170,7 +171,7 @@ class _TennisNewsState extends State<TennisNews> {
                               index < ((currentPageIndex + 1) * perPage)) {
                             return ChangeNotifierProvider.value(
                               value: snapshot.data![index],
-                              child: const ArticlesWidget(
+                              child: const TennisArticlesWidget(
                                   // imageUrl: snapshot.data![index].,
                                   // dateToShow: snapshot.data![index].dateToShow,
                                   // readingTime:

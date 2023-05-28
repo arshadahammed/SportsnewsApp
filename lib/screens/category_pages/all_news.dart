@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/models/news_model.dart';
+import 'package:sportsnews/providers/all_news_provider.dart';
 import 'package:sportsnews/providers/news_provider.dart';
 import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/articles_widget.dart';
@@ -29,8 +30,8 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
     Size size = Utils(context).getScreenSize;
-    final newsProvider = Provider.of<NewsProvider>(context);
-    int totalItemsListLength = newsProvider.newsList.length;
+    final allNewsProvider = Provider.of<AllNewsProvider>(context);
+    int totalItemsListLength = allNewsProvider.newsList.length;
 
     int ItemCount = (totalItemsListLength / perPage).ceil();
 
@@ -141,7 +142,7 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
             const VerticalSpacing(10),
             //futureBuilder
             FutureBuilder<List<NewsModel>>(
-                future: newsProvider.cachedfetchTopTrendingHeadlines(),
+                future: allNewsProvider.fetchAllNews(),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const ListViewLoadingWidget();

@@ -4,10 +4,23 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/inner_screens/blog_details.dart';
+import 'package:sportsnews/inner_screens/popular_blog_details.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/services/utils.dart';
 
 class PopularNews extends StatelessWidget {
+  String getTimeDifference(DateTime publishedTime) {
+    final now = DateTime.now();
+    final difference = now.difference(publishedTime);
+
+    if (difference.inHours < 24) {
+      return '${difference.inHours} ${difference.inHours == 1 ? 'hour' : 'hours'} ago';
+    } else {
+      final days = difference.inDays;
+      return '$days ${days == 1 ? 'day' : 'days'} ago';
+    }
+  }
+
   const PopularNews({super.key});
 
   @override
@@ -15,6 +28,10 @@ class PopularNews extends StatelessWidget {
     final newsModelProvider = Provider.of<NewsModel>(context);
     final size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
+    DateTime publishedTime = DateTime.parse(newsModelProvider.publishedAt);
+
+    final timeDifference = getTimeDifference(publishedTime);
+
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 0),
       child: Material(
@@ -22,8 +39,15 @@ class PopularNews extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, NewsDetailsScreen.routeName,
-                arguments: newsModelProvider.publishedAt);
+            // Navigator.pushNamed(context, NewsDetailsScreen.routeName,
+            //     arguments: newsModelProvider.publishedAt);
+            Navigator.pushNamed(context, PopularNewsDetails.routeName,
+                arguments: newsModelProvider.newsId);
+            // Navigator.pushNamed(context, NewsDetailsScreen.routeName,
+            //     arguments: {
+            //       'argumentID': newsModelProvider.newsId,
+            //       'argumentDate': newsModelProvider.publishedAt,
+            //     });
           },
           child: Column(
             children: [
@@ -83,9 +107,12 @@ class PopularNews extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Text(
-                          "Arshad , 3 hours ago",
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            timeDifference,
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
                         )
                       ],
                     ),

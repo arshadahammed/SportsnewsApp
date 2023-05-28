@@ -12,6 +12,8 @@ import 'package:sportsnews/consts/global_colors.dart';
 import 'package:sportsnews/consts/vars.dart';
 import 'package:sportsnews/inner_screens/search_screen.dart';
 import 'package:sportsnews/models/main_categories.dart';
+import 'package:sportsnews/providers/popular_news_provider.dart';
+import 'package:sportsnews/providers/toptrending_provider.dart';
 import 'package:sportsnews/screens/all_news.dart';
 import 'package:sportsnews/screens/category_pages/all_news.dart';
 import 'package:sportsnews/screens/category_pages/cricket_news.dart';
@@ -53,10 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
     OtherNews(),
     //TestDart(),
   ];
-  void getCachedData() async {
-    Provider.of<NewsProvider>(context).cachedfetchTopTrendingHeadlines();
-    setState(() {});
-  }
+  // void getCachedData() async {
+  //   Provider.of<NewsProvider>(context).cachedfetchTopTrendingHeadlines();
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
@@ -73,6 +75,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
+    final popularNewsProvider = Provider.of<PopularNewsProvider>(context);
+    final topTrendingNewsProvider =
+        Provider.of<TopTrendingNewsProvider>(context);
     return Scaffold(
       //Theme.of(context).scaffoldBackgroundColor));
       // resizeToAvoidBottomInset: true,
@@ -129,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           // getFeature(),
           FutureBuilder<List<NewsModel>>(
-              future: newsProvider.cachedfetchTopTrendingHeadlines(),
+              future: topTrendingNewsProvider.fetchToptrendingNews(),
               builder: ((context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Container(
@@ -203,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // popular
           // get popular,
           FutureBuilder<List<NewsModel>>(
-              future: newsProvider.cachedfetchPopularNews(),
+              future: popularNewsProvider.fetchPopularNews(),
               builder: ((context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return PopularLoadingWidget();

@@ -3,7 +3,9 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/inner_screens/all_news_blog.dart';
+import 'package:sportsnews/inner_screens/football_news_blog.dart';
 import 'package:sportsnews/inner_screens/news_details_webview.dart';
+import 'package:sportsnews/inner_screens/tennis_blog_details.dart';
 import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/services/utils.dart';
@@ -12,8 +14,8 @@ import 'package:sportsnews/widgets/vertical_spacing.dart';
 import '../consts/styles.dart';
 import '../inner_screens/blog_details.dart';
 
-class ArticlesWidget extends StatelessWidget {
-  const ArticlesWidget({
+class TennisArticlesWidget extends StatelessWidget {
+  const TennisArticlesWidget({
     Key? key,
   }) : super(key: key);
   // final String imageUrl, title, url, dateToShow, readingTime;
@@ -30,7 +32,7 @@ class ArticlesWidget extends StatelessWidget {
             // Navigate to the in app details screen
             // Navigator.pushNamed(context, NewsDetailsScreen.routeName,
             //     arguments: newsModelProvider.publishedAt);
-            Navigator.pushNamed(context, AllNewsDetails.routeName,
+            Navigator.pushNamed(context, TennisNewsDetails.routeName,
                 arguments: newsModelProvider.newsId);
           },
           child: Stack(

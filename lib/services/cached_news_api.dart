@@ -11,6 +11,42 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:http/http.dart' as http;
 
 class CachedNewsAPiServices {
+  //allnews
+  static Future<List<NewsModel>> getAllNews() async {
+    try {
+      Dio dio = Dio();
+      // DioCacheManager cacheManager =
+      //     DioCacheManager(CacheConfig(baseUrl: BASEURL2));
+      // dio.interceptors.add(cacheManager.interceptor);
+
+      // Options cacheOptions = buildCacheOptions(
+      //   Duration(minutes: 10),
+      //   maxStale: Duration(minutes: 10),
+      //   //forceRefresh: true,
+      // );
+
+      Response response = await dio.get(
+        BASEURL2,
+        //options: cacheOptions,
+      );
+
+      log('Response status: ${response.statusCode}');
+      Map<String, dynamic> data = response.data;
+      //log(response.data.toString());
+
+      List newsTempList = [];
+      if (data['code'] != null) {
+        throw HttpException(data['code']);
+      }
+      for (var article in data["articles"]) {
+        newsTempList.add(article);
+      }
+      return NewsModel.newsFromSnapshot(newsTempList);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
   //toptrending
 
   static Future<List<NewsModel>> getTopHeadlines() async {

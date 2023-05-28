@@ -12,7 +12,9 @@ FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
 class FirebaseDynamicLinkService {
   static Future<String> createDynamicLink(
-      bool short, NewsModel newsModal) async {
+    bool short,
+    NewsModel newsModal,
+  ) async {
     String _linkMessage;
     //${newsModal.newsId}
     final dynamicLinkParams = DynamicLinkParameters(
@@ -23,6 +25,13 @@ class FirebaseDynamicLinkService {
         packageName: "com.seyfert.sportsnews",
         minimumVersion: 0,
       ),
+    );
+
+    socialMetaTagParameters:
+    SocialMetaTagParameters(
+      title: newsModal.title,
+      description: newsModal.content,
+      imageUrl: Uri.parse(newsModal.urlToImage),
     );
 
     Uri url;

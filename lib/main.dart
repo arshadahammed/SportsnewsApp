@@ -4,11 +4,25 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:sportsnews/inner_screens/all_news_blog.dart';
 import 'package:sportsnews/inner_screens/blog_details.dart';
+import 'package:sportsnews/inner_screens/cricket_news_blog.dart';
 import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
+import 'package:sportsnews/inner_screens/football_news_blog.dart';
+import 'package:sportsnews/inner_screens/other_blog_details.dart';
+import 'package:sportsnews/inner_screens/popular_blog_details.dart';
+import 'package:sportsnews/inner_screens/tennis_blog_details.dart';
+import 'package:sportsnews/inner_screens/top_trending_newsdetails.dart';
+import 'package:sportsnews/providers/all_news_provider.dart';
+import 'package:sportsnews/providers/cricket_news_provider.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
+import 'package:sportsnews/providers/football_news_provider.dart';
 import 'package:sportsnews/providers/news_provider.dart';
 import 'package:sportsnews/providers/notification_provider.dart';
+import 'package:sportsnews/providers/other_news_provider.dart';
+import 'package:sportsnews/providers/popular_news_provider.dart';
+import 'package:sportsnews/providers/tennis_news_provider.dart';
+import 'package:sportsnews/providers/toptrending_provider.dart';
 import 'package:sportsnews/screens/main_homescreen.dart';
 import 'package:sportsnews/services/utils.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -82,19 +96,47 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (_) => NewsProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => PopularNewsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TopTrendingNewsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AllNewsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FootballNewsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CricketNewsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TennisNewsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => OtherNewsProvider(),
+        ),
       ],
       child:
           //Notify about theme changes
           Consumer<ThemeProvider>(builder: (context, themeChangeProvider, ch) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'News App - Flutter&API Course',
+          title: 'Sports Caster',
           theme: Styles.themeData(themeChangeProvider.getDarkTheme, context),
           home: const MainHomeScreen(),
           routes: {
-            NewsDetailsScreen.routeName: (ctx) => const NewsDetailsScreen(),
+            NewsDetailsScreen.routeName: (ctx) => NewsDetailsScreen(),
             DeepLinkNewsDetailsScreen.routeName: (ctx) =>
                 const DeepLinkNewsDetailsScreen(),
+            PopularNewsDetails.routeName: (ctx) => PopularNewsDetails(),
+            TopTrendingNewsDetails.routeName: (ctx) => TopTrendingNewsDetails(),
+            AllNewsDetails.routeName: (ctx) => AllNewsDetails(),
+            FootballNewsDetails.routeName: (ctx) => FootballNewsDetails(),
+            CricketNewsDetails.routeName: (ctx) => CricketNewsDetails(),
+            TennisNewsDetails.routeName: (ctx) => TennisNewsDetails(),
+            OtherNewsDetails.routeName: (ctx) => OtherNewsDetails(),
           },
         );
       }),
