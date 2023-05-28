@@ -62,7 +62,7 @@ class _CricketNewsDetailsState extends State<CricketNewsDetails> {
     //final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
     final newsId = ModalRoute.of(context)!.settings.arguments as String;
     final currentNews = cricketNewsProvider.findById(id: newsId);
-
+    //d
     // final currentNews = newsId == null
     //   ? newsProvider.findByDate(publishedAt: publishedAt)
     //   : newsProvider.findById(id: newsId);
