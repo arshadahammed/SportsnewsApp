@@ -332,9 +332,12 @@ class CachedNewsAPiServices {
   //getfavourite news
   static Future<List<NewsModel>> getFavNews() async {
     try {
-      log("Started to fetch fav");
+      //log("Started to fetch fav");
       Dio dio = Dio();
-      // DioCacheManager cacheManager =
+      // DioCacheManag
+      //
+      //
+      //er cacheManager =
       //     DioCacheManager(CacheConfig(baseUrl: BASEURL2));
       // dio.interceptors.add(cacheManager.interceptor);
 
@@ -365,14 +368,15 @@ class CachedNewsAPiServices {
         newsTempList.add(article);
       }
 
-      log(newsTempList.length.toString());
+      //log(newsTempList.length.toString());
 
       List<String> _favoriteIds = [];
-      log(_favoriteIds.length.toString());
+      //log(_favoriteIds.length.toString());
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       _favoriteIds = prefs.getStringList('favoriteIds') ?? [];
 
       List<NewsModel> newsModelList = NewsModel.newsFromSnapshot(newsTempList);
+
       return newsModelList
           .where((news) => _favoriteIds.contains(news.newsId))
           .toList();

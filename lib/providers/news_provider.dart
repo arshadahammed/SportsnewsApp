@@ -62,6 +62,8 @@ class NewsProvider with ChangeNotifier {
     newsList = await CachedNewsAPiServices.getFavNews();
     //log("Get fav started ..............");
     //log(newsList[5].newsId);
+    //notifyListeners();
+    log(newsList.length.toString());
     return newsList.reversed.toList();
   }
 

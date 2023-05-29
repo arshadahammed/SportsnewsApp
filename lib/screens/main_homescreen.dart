@@ -19,7 +19,7 @@ import 'package:sportsnews/widgets/drawer_widget.dart';
 import 'package:sportsnews/widgets/snackbar.dart';
 
 class MainHomeScreen extends StatefulWidget {
-  const MainHomeScreen({super.key});
+  MainHomeScreen({super.key});
 
   @override
   State<MainHomeScreen> createState() => _MainHomeScreenState();
@@ -33,12 +33,6 @@ class _MainHomeScreenState extends State<MainHomeScreen>
   int myIndex = 0;
   //AppOpenAdManager appOpenAdManager = AppOpenAdManager();
   //bool isPaused = false;
-  List<Widget> widgetList = const [
-    HomeScreen(),
-    AllCategoryNews(),
-    FavouriteNews(),
-    AccountPage(),
-  ];
 
   @override
   void initState() {
@@ -115,6 +109,12 @@ class _MainHomeScreenState extends State<MainHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> widgetList = [
+      HomeScreen(),
+      AllCategoryNews(),
+      FavouriteNews(),
+      AccountPage(),
+    ];
     final Color color = Utils(context).getColor;
     return WillPopScope(
       onWillPop: () async {
@@ -182,7 +182,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                 });
               },
               currentIndex: myIndex,
-              items: const [
+              items: [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   label: 'Home',

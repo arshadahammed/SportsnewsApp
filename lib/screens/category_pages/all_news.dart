@@ -34,11 +34,11 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
     int totalItemsListLength = allNewsProvider.newsList.length;
 
     int ItemCount = (totalItemsListLength / perPage).ceil();
-
+    ItemCount = ItemCount > 0 ? ItemCount : 1;
     return Scaffold(
       // appBar: AppBar(
       //   iconTheme: IconThemeData(color: color),
-      //   elevation: 0,
+      //   elevation:
       //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       //   centerTitle: true,
       //   title: Text(

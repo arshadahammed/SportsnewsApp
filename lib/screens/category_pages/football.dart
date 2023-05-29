@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/models/news_model.dart';
+import 'package:sportsnews/providers/football_news_provider.dart';
 import 'package:sportsnews/providers/news_provider.dart';
 import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/articles_widget.dart';
@@ -30,10 +31,11 @@ class _FootballNewsState extends State<FootballNews> {
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
     Size size = Utils(context).getScreenSize;
-    final newsProvider = Provider.of<NewsProvider>(context);
+    final newsProvider = Provider.of<FootballNewsProvider>(context);
     int totalItemsListLength = newsProvider.newsList.length;
 
     int ItemCount = (totalItemsListLength / perPage).ceil();
+    ItemCount = ItemCount > 0 ? ItemCount : 1;
 
     return Scaffold(
       appBar: AppBar(

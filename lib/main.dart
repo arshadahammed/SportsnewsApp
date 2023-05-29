@@ -24,6 +24,7 @@ import 'package:sportsnews/providers/popular_news_provider.dart';
 import 'package:sportsnews/providers/tennis_news_provider.dart';
 import 'package:sportsnews/providers/toptrending_provider.dart';
 import 'package:sportsnews/screens/main_homescreen.dart';
+import 'package:sportsnews/screens/splash/splash_screen.dart';
 import 'package:sportsnews/services/utils.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -125,7 +126,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           title: 'Sports Caster',
           theme: Styles.themeData(themeChangeProvider.getDarkTheme, context),
-          home: const MainHomeScreen(),
+          home: SplashScreen(),
           routes: {
             NewsDetailsScreen.routeName: (ctx) => NewsDetailsScreen(),
             DeepLinkNewsDetailsScreen.routeName: (ctx) =>

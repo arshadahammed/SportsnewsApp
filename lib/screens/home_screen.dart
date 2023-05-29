@@ -143,13 +143,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 } else if (snapshot.hasError) {
                   return Container(
-                    height: 100,
-                    width: 100,
-                    child: Expanded(
-                      child: EmptyNewsWidget(
-                        text: "an error occured ${snapshot.error}",
-                        imagePath: 'assets/images/no_news.png',
-                      ),
+                    height: 300,
+                    width: size.width,
+                    child: const Expanded(
+                      child: Center(child: CircularProgressIndicator()),
+
+                      // EmptyNewsWidget(
+                      //   text: "an error occured ${snapshot.error}",
+                      //   imagePath: 'assets/images/no_news.png',
+                      // ),
                     ),
                   );
                 } else if (snapshot.data == null) {
@@ -213,14 +215,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return PopularLoadingWidget();
                 } else if (snapshot.hasError) {
-                  return Container(
-                    height: 200,
-                    width: 150,
-                    child: Expanded(
-                      child: EmptyNewsWidget(
-                        text: "an error occured ${snapshot.error}",
-                        imagePath: 'assets/images/no_news.png',
-                      ),
+                  return Expanded(
+                    child: EmptyNewsWidget(
+                      text: "an error occured ${snapshot.error}",
+                      imagePath: 'assets/images/no_news.png',
                     ),
                   );
                 } else if (snapshot.data == null) {

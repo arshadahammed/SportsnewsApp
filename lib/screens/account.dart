@@ -109,6 +109,14 @@ class _AccountPageState extends State<AccountPage> {
               //   height: 70,
               //   radius: 20,
               // ),
+              Container(
+              height: 100,
+              width: 100,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/png/logo.png'),
+                      fit: BoxFit.cover)),
+            ),
               const SizedBox(
                 height: 10,
               ),

@@ -125,14 +125,14 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () async {
+                          isSearching = true;
+                          _searchTextController.text = searchKeywords[index];
+
                           searchList =
                               await newsProvider.searchSlugNewsProvider(
                                   query: _searchTextController.text.trim());
-                          isSearching = true;
                           focusNode.unfocus();
-                          setState(() {
-                            _searchTextController.text = searchKeywords[index];
-                          });
+                          setState(() {});
                         },
                         child: Container(
                             margin: const EdgeInsets.all(4.0),

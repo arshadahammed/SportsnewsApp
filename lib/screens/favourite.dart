@@ -20,6 +20,8 @@ class FavouriteNews extends StatefulWidget {
 }
 
 class _FavouriteNewsState extends State<FavouriteNews> {
+  late NewsProvider _myProvider;
+  late Future<List<NewsModel>> _favlist;
   int currentPageIndex = 0;
   int perPage = 3;
   int futureBuilderItemCount = 0;
@@ -50,6 +52,16 @@ class _FavouriteNewsState extends State<FavouriteNews> {
     });
   }
 
+  // void refresh() {
+  //   setState(() {});
+  // }
+
+  //1 sec
+  // Future<void> _callRefreshAfterDelay() async {
+  //   await Future.delayed(Duration(seconds: 1)); // Delay for one second
+  //   refresh(); // Call the refresh function after the delay
+  // }
+
   @override
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
@@ -58,6 +70,7 @@ class _FavouriteNewsState extends State<FavouriteNews> {
     int totalItemsListLength = newsProvider.newsList.length;
 
     int ItemCount = (totalItemsListLength / perPage).ceil();
+    ItemCount = ItemCount > 0 ? ItemCount : 1;
 
     return Scaffold(
       // appBar: AppBar(
