@@ -88,8 +88,9 @@ class _MainHomeScreenState extends State<MainHomeScreen>
     await Future.delayed(Duration(seconds: 1));
     final PendingDynamicLinkData? initialLink =
         await FirebaseDynamicLinks.instance.getInitialLink();
-    final Uri deepLink = initialLink!.link;
-    if (deepLink != null) {
+    if (initialLink != null) {
+      final Uri deepLink = initialLink.link;
+
       handleDeepLink(deepLink);
     }
   }

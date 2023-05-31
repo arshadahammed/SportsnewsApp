@@ -7,6 +7,8 @@ class SettingItem extends StatelessWidget {
   final String? leadingIcon;
   final Color leadingIconColor;
   final Color bgIconColor;
+  final Color titleColor;
+
   final String title;
   final GestureTapCallback? onTap;
   const SettingItem(
@@ -15,7 +17,8 @@ class SettingItem extends StatelessWidget {
       this.onTap,
       this.leadingIcon,
       this.leadingIconColor = Colors.white,
-      this.bgIconColor = primary})
+      this.bgIconColor = primary,
+      required this.titleColor})
       : super(key: key);
 
   @override
@@ -46,7 +49,10 @@ class SettingItem extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: titleColor,
+                      ),
                     ),
                   ),
                   const Icon(

@@ -1,167 +1,151 @@
-// import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-
+// //Packages
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 // import 'package:flutter/material.dart';
-// import 'package:flutter_iconly/flutter_iconly.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:page_transition/page_transition.dart';
-// import 'package:sportsnews/inner_screens/search_screen.dart';
-// import 'package:sportsnews/screens/account.dart';
-// import 'package:sportsnews/screens/all_news.dart';
-// import 'package:sportsnews/screens/favourite.dart';
-// import 'package:sportsnews/screens/home_screen.dart';
+// import 'package:flutter/services.dart';
+// import 'package:provider/provider.dart';
+// import 'package:sportsnews/inner_screens/all_news_blog.dart';
+// import 'package:sportsnews/inner_screens/blog_details.dart';
+// import 'package:sportsnews/inner_screens/cricket_news_blog.dart';
+// import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
+// import 'package:sportsnews/inner_screens/football_news_blog.dart';
+// import 'package:sportsnews/inner_screens/other_blog_details.dart';
+// import 'package:sportsnews/inner_screens/popular_blog_details.dart';
+// import 'package:sportsnews/inner_screens/tennis_blog_details.dart';
+// import 'package:sportsnews/inner_screens/top_trending_newsdetails.dart';
+// import 'package:sportsnews/providers/all_news_provider.dart';
+// import 'package:sportsnews/providers/cricket_news_provider.dart';
+// import 'package:sportsnews/providers/firebase_dynamic_link.dart';
+// import 'package:sportsnews/providers/football_news_provider.dart';
+// import 'package:sportsnews/providers/news_provider.dart';
+// import 'package:sportsnews/providers/notification_provider.dart';
+// import 'package:sportsnews/providers/other_news_provider.dart';
+// import 'package:sportsnews/providers/popular_news_provider.dart';
+// import 'package:sportsnews/providers/tennis_news_provider.dart';
+// import 'package:sportsnews/providers/toptrending_provider.dart';
+// import 'package:sportsnews/screens/main_homescreen.dart';
+// import 'package:sportsnews/screens/splash/splash_screen.dart';
 // import 'package:sportsnews/services/utils.dart';
-// import 'package:sportsnews/widgets/drawer_widget.dart';
-// import 'package:sportsnews/widgets/snackbar.dart';
+// import 'package:timezone/data/latest.dart' as tz;
+// import 'package:timezone/timezone.dart' as tz;
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-// class MainHomeScreen extends StatefulWidget {
-//   const MainHomeScreen({super.key});
+// //Screens
+// import 'providers/bookmarks_provider.dart';
+// import 'screens/home_screen.dart';
 
-//   @override
-//   State<MainHomeScreen> createState() => _MainHomeScreenState();
+// //Consts
+// import 'consts/theme_data.dart';
+
+// //Providers
+// import 'providers/theme_provider.dart';
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+//   //tz.initializeTimeZones();
+
+//   runApp(
+//     ChangeNotifierProvider<ThemeProvider>(
+//       create: (_) => ThemeProvider(), // Set initial theme here
+//       child: MyApp(),
+//     ),
+//   );
 // }
 
-// class _MainHomeScreenState extends State<MainHomeScreen>
-//     with WidgetsBindingObserver {
-//   DateTime preBackpress = DateTime.now();
-//   int _selectedIndex = 0;
-//   late PageController _pageController;
+// class MyApp extends StatefulWidget {
+//   const MyApp({Key? key}) : super(key: key);
 
-//   //AppOpenAdManager appOpenAdManager = AppOpenAdManager();
-//   //bool isPaused = false;
+//   @override
+//   State<MyApp> createState() => _MyAppState();
+// }
+
+// class _MyAppState extends State<MyApp> {
+//   //Need it to access the theme Provider
+//   ThemeProvider themeChangeProvider = ThemeProvider();
 
 //   @override
 //   void initState() {
+//     getCurrentAppTheme();
+//     //getCachedData();
 //     super.initState();
-//     // appOpenAdManager.loadAd();
-//     // WidgetsBinding.instance.addObserver(this);
-//     _pageController = PageController();
+//     LocalNotifications.sendSheduledNotification(
+//         "Check Sports Caster ", "New Sports news added");
 //   }
 
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     _pageController.dispose();
-//     WidgetsBinding.instance.removeObserver(this);
+//   //Fetch the current theme
+//   void getCurrentAppTheme() async {
+//     themeChangeProvider.setDarkTheme =
+//         await themeChangeProvider.darkThemePreferences.getTheme();
 //   }
 
-//   // @override
-//   // void didChangeAppLifecycleState(AppLifecycleState state) {
-//   //   super.didChangeAppLifecycleState(state);
-//   //   if (state == AppLifecycleState.paused) {
-//   //     isPaused = true;
-//   //   }
-//   //   if (state == AppLifecycleState.resumed && isPaused) {
-//   //     // print("Resumed==========================");
-//   //     appOpenAdManager.showAdIfAvailable();
-//   //     isPaused = false;
-//   //   }
+//   // Color getCurrentCOlor() {
+//   //   final Color color = Utils(context).getColor;
+//   //   return color;
 //   // }
+
+//   //fetchDatafromApi and cache it
+//   void getCachedData() async {
+//     Provider.of<NewsProvider>(context).cachedfetchTopTrendingHeadlines();
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final Color color = Utils(context).getColor;
-//     return WillPopScope(
-//       onWillPop: () async {
-//         final timegap = DateTime.now().difference(preBackpress);
-//         //  print('$timegap');
-//         final canExit = timegap >= const Duration(seconds: 2);
-
-//         preBackpress = DateTime.now();
-//         if (canExit) {
-//           //show snackbar
-//           // const snack = SnackBar(
-//           //   content: Text('Press back button again to Exit'),
-//           //   duration: Duration(seconds: 2),
-//           // );
-//           // ScaffoldMessenger.of(context).showSnackBar(snack);
-//           EssentialWidgets.showSnackBar(
-//               context, "Press back button again to Exit");
-//           return false;
-//         } else {
-//           return true;
-//         }
-//       },
-//       child: Scaffold(
-//         appBar: AppBar(
-//           iconTheme: IconThemeData(color: color),
-//           elevation: 0,
-//           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-//           centerTitle: true,
-//           title: Text(
-//             'Sports News',
-//             style: GoogleFonts.lobster(
-//                 textStyle:
-//                     TextStyle(color: color, fontSize: 20, letterSpacing: 0.6)),
-//           ),
-//           actions: [
-//             IconButton(
-//               onPressed: () {
-//                 Navigator.push(
-//                   context,
-//                   PageTransition(
-//                       type: PageTransitionType.rightToLeft,
-//                       child: const SearchScreen(),
-//                       inheritTheme: true,
-//                       ctx: context),
-//                 );
-//               },
-//               icon: const Icon(
-//                 IconlyLight.search,
-//               ),
-//             )
-//           ],
+//     return MultiProvider(
+//       providers: [
+//         ChangeNotifierProvider(create: (_) {
+//           //Notify about theme changes
+//           return themeChangeProvider;
+//         }),
+//         ChangeNotifierProvider(
+//           create: (_) => NewsProvider(),
 //         ),
-//         drawer: const DrawerWidget(),
-//         body: SizedBox.expand(
-//           child: PageView(
-//             controller: _pageController,
-//             onPageChanged: (index) {
-//               setState(() {
-//                 _selectedIndex = index;
-//               });
-//             },
-//             children: const [
-//               //subHomePAge
-//               HomeScreen(),
-//               AllNews(),
-//               FavouriteNews(),
-//               AccountPage(),
-//             ],
-//           ),
+//         ChangeNotifierProvider(
+//           create: (_) => PopularNewsProvider(),
 //         ),
-//         bottomNavigationBar: BottomNavyBar(
-//           selectedIndex: _selectedIndex,
-//           showElevation: true, // use this to remove appBar's elevation
-//           onItemSelected: (index) => setState(() {
-//             _pageController.jumpToPage(index);
-//           }),
-//           items: [
-//             BottomNavyBarItem(
-//                 icon: const Icon(Icons.home_rounded),
-//                 title: const Text('Home'),
-//                 activeColor: Colors.green,
-//                 inactiveColor: const Color.fromARGB(255, 179, 75, 75)),
-//             BottomNavyBarItem(
-//               icon: const Icon(Icons.bar_chart_rounded),
-//               title: const Text('All Courses'),
-//               inactiveColor: Colors.grey[500],
-//               activeColor: Colors.green,
-//             ),
-//             BottomNavyBarItem(
-//               icon: const Icon(Icons.favorite_outline_rounded),
-//               title: const Text('Favourite'),
-//               inactiveColor: Colors.grey[500],
-//               activeColor: Colors.green,
-//             ),
-//             BottomNavyBarItem(
-//               icon: const Icon(Icons.person_outline_rounded),
-//               title: const Text('Account'),
-//               inactiveColor: Colors.grey[500],
-//               activeColor: Colors.green,
-//             ),
-//           ],
+//         ChangeNotifierProvider(
+//           create: (_) => TopTrendingNewsProvider(),
 //         ),
-//       ),
+//         ChangeNotifierProvider(
+//           create: (_) => AllNewsProvider(),
+//         ),
+//         ChangeNotifierProvider(
+//           create: (_) => FootballNewsProvider(),
+//         ),
+//         ChangeNotifierProvider(
+//           create: (_) => CricketNewsProvider(),
+//         ),
+//         ChangeNotifierProvider(
+//           create: (_) => TennisNewsProvider(),
+//         ),
+//         ChangeNotifierProvider(
+//           create: (_) => OtherNewsProvider(),
+//         ),
+//       ],
+//       child:
+//           //Notify about theme changes
+//           Consumer<ThemeProvider>(builder: (context, themeChangeProvider, ch) {
+//         return MaterialApp(
+//           debugShowCheckedModeBanner: false,
+//           title: 'Sports Caster',
+//           theme: Styles.themeData(themeChangeProvider.getDarkTheme, context),
+//           home: SplashScreen(),
+//           routes: {
+//             NewsDetailsScreen.routeName: (ctx) => NewsDetailsScreen(),
+//             DeepLinkNewsDetailsScreen.routeName: (ctx) =>
+//                 const DeepLinkNewsDetailsScreen(),
+//             PopularNewsDetails.routeName: (ctx) => PopularNewsDetails(),
+//             TopTrendingNewsDetails.routeName: (ctx) => TopTrendingNewsDetails(),
+//             AllNewsDetails.routeName: (ctx) => AllNewsDetails(),
+//             FootballNewsDetails.routeName: (ctx) => FootballNewsDetails(),
+//             CricketNewsDetails.routeName: (ctx) => CricketNewsDetails(),
+//             TennisNewsDetails.routeName: (ctx) => TennisNewsDetails(),
+//             OtherNewsDetails.routeName: (ctx) => OtherNewsDetails(),
+//           },
+//         );
+//       }),
 //     );
 //   }
 // }

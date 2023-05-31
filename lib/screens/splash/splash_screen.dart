@@ -17,7 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 8), () {
       //appOpenAdManager.showAdIfAvailable();
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MainHomeScreen(),));
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainHomeScreen(),
+          ));
     });
     super.initState();
   }
@@ -25,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown,
+      backgroundColor: Colors.brown.withOpacity(0.7),
       body: Container(
         alignment: Alignment.center,
         child: Column(
@@ -33,8 +36,8 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 120,
-              width: 120,
+              height: 200,
+              width: 200,
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('assets/png/logo.png'),
@@ -54,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       bottomNavigationBar: Container(
         height: 50,
-        color: Colors.white,
+        color: Colors.brown.withOpacity(0.7),
         alignment: Alignment.center,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

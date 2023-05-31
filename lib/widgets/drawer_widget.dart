@@ -34,6 +34,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final newsProvider = Provider.of<NewsProvider>(context);
+    bool isDarkMode = themeProvider.getDarkTheme;
 
     return Drawer(
       child: Material(
@@ -41,26 +42,29 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         child: ListView(
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              decoration: BoxDecoration(
+                  color: isDarkMode
+                      ? Theme.of(context).scaffoldBackgroundColor
+                      : Colors.brown),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
                     child: Image.asset(
-                      'assets/images/newspaper.png',
-                      height: 60,
-                      width: 60,
+                      'assets/png/logo.png',
+                      height: 500,
+                      width: 500,
                     ),
                   ),
                   const VerticalSpacing(20),
-                  Flexible(
-                    child: Text(
-                      'News app',
-                      style: GoogleFonts.lobster(
-                          textStyle: const TextStyle(
-                              fontSize: 20, letterSpacing: 0.6)),
-                    ),
-                  ),
+                  // Flexible(
+                  //   child: Text(
+                  //     'News app',
+                  //     style: GoogleFonts.lobster(
+                  //         textStyle: const TextStyle(
+                  //             fontSize: 20, letterSpacing: 0.6)),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -121,6 +125,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 value: themeProvider.getDarkTheme,
                 onChanged: (bool value) {
                   setState(() {
+                    //themeProvider.toggleTheme();
                     themeProvider.setDarkTheme = value;
                   });
                 }),

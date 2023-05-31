@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sportsnews/providers/theme_provider.dart';
 import 'package:sportsnews/screens/contact_us.dart';
 import 'package:sportsnews/screens/favourite.dart';
 import 'package:sportsnews/screens/privacy_policy.dart';
+import 'package:sportsnews/screens/splash/splash_screen.dart';
+import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/setting_item.dart';
 import 'package:sportsnews/widgets/settings_box.dart';
+import 'package:provider/provider.dart';
 
 import '../consts/global_colors.dart';
 
@@ -70,6 +74,10 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    // final themeProvider = Provider.of<ThemeProvider>(context);
+    // bool isDarkMode = themeProvider.getDarkTheme;
+
+    //statusbar
     return CustomScrollView(
       slivers: <Widget>[
         // SliverAppBar(
@@ -97,6 +105,11 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget getBody() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    bool isDarkMode = themeProvider.getDarkTheme;
+    final Color color = Utils(context).getColor;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: Column(
@@ -109,65 +122,80 @@ class _AccountPageState extends State<AccountPage> {
               //   height: 70,
               //   radius: 20,
               // ),
-              Container(
-              height: 100,
-              width: 100,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/png/logo.png'),
-                      fit: BoxFit.cover)),
-            ),
-              const SizedBox(
-                height: 10,
+              Card(
+                //color: Colors.green,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: isDarkMode
+                            ? Theme.of(context).scaffoldBackgroundColor
+                            : Colors.brown,
+                        image: DecorationImage(
+                          image: AssetImage('assets/png/logo.png'),
+                          fit: BoxFit.cover,
+                        )),
+                    // child: ClipRRect(
+                    //   borderRadius: BorderRadius.circular(10),
+                    // ),
+                  ),
+                ),
               ),
-              Text(
-                //profile["name"]!
-                "Sports Caster",
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
+
+              // Text(
+              //   //profile["name"]!
+              //   "Sports Caster",
+              //   style:
+              //       const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              // ),
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
+
           // ignore: avoid_unnecessary_containers
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                    child: SettingBox(
-                  title: "9 courses",
-                  icon: "assets/icons/work.svg",
-                )),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: SettingBox(
-                  title: "55 hours",
-                  icon: "assets/icons/time.svg",
-                )),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: SettingBox(
-                  title: "4.8",
-                  icon: "assets/icons/star.svg",
-                )),
-              ],
-            ),
-          ),
+          // Container(
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Expanded(
+          //           child: SettingBox(
+          //         title: "9 courses",
+          //         icon: "assets/icons/work.svg",
+          //       )),
+          //       SizedBox(
+          //         width: 10,
+          //       ),
+          //       Expanded(
+          //           child: SettingBox(
+          //         title: "55 hours",
+          //         icon: "assets/icons/time.svg",
+          //       )),
+          //       SizedBox(
+          //         width: 10,
+          //       ),
+          //       Expanded(
+          //           child: SettingBox(
+          //         title: "4.8",
+          //         icon: "assets/icons/star.svg",
+          //       )),
+          //     ],
+          //   ),
+          // ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           Container(
             padding: const EdgeInsets.only(left: 15, right: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: cardColor,
+              color: isDarkMode
+                  ? Theme.of(context).scaffoldBackgroundColor
+                  : cardColor,
               boxShadow: [
                 BoxShadow(
                   color: shadowColor.withOpacity(0.1),
@@ -182,6 +210,7 @@ class _AccountPageState extends State<AccountPage> {
                 title: "Share to your friends",
                 leadingIcon: "assets/icons/share.svg",
                 bgIconColor: blue,
+                titleColor: color,
                 onTap: () {},
               ),
               Padding(
@@ -193,6 +222,7 @@ class _AccountPageState extends State<AccountPage> {
               ),
               SettingItem(
                 title: "Rate us",
+                titleColor: color,
                 leadingIcon: "assets/icons/star.svg",
                 bgIconColor: green,
                 onTap: () {},
@@ -206,11 +236,12 @@ class _AccountPageState extends State<AccountPage> {
               ),
               SettingItem(
                 title: "Bookmark",
+                titleColor: color,
                 leadingIcon: "assets/icons/bookmark.svg",
                 bgIconColor: primary,
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const FavouriteNews()));
+                      builder: (context) => const SplashScreen()));
                 },
               ),
             ]),
@@ -222,7 +253,9 @@ class _AccountPageState extends State<AccountPage> {
             padding: const EdgeInsets.only(left: 15, right: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: cardColor,
+              color: isDarkMode
+                  ? Theme.of(context).scaffoldBackgroundColor
+                  : cardColor,
               boxShadow: [
                 BoxShadow(
                   color: shadowColor.withOpacity(0.1),
@@ -235,6 +268,7 @@ class _AccountPageState extends State<AccountPage> {
             child: Column(children: [
               SettingItem(
                 title: "Contact Us",
+                titleColor: color,
                 leadingIcon: "assets/icons/contact.svg",
                 bgIconColor: purple,
                 onTap: () {
@@ -251,6 +285,7 @@ class _AccountPageState extends State<AccountPage> {
               ),
               SettingItem(
                 title: "Privacy",
+                titleColor: color,
                 leadingIcon: "assets/icons/shield.svg",
                 bgIconColor: orange,
                 onTap: () {
@@ -267,7 +302,9 @@ class _AccountPageState extends State<AccountPage> {
             padding: const EdgeInsets.only(left: 15, right: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: cardColor,
+              color: isDarkMode
+                  ? Theme.of(context).scaffoldBackgroundColor
+                  : cardColor,
               boxShadow: [
                 BoxShadow(
                   color: shadowColor.withOpacity(0.1),
@@ -280,6 +317,7 @@ class _AccountPageState extends State<AccountPage> {
             child: Column(children: [
               SettingItem(
                 title: "Exit",
+                titleColor: color,
                 leadingIcon: "assets/icons/logout.svg",
                 bgIconColor: darker,
                 onTap: () {
