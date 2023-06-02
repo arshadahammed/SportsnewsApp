@@ -8,6 +8,7 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sportsnews/inner_screens/search_screen.dart';
+import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/screens/account.dart';
 import 'package:sportsnews/screens/all_news.dart';
@@ -15,6 +16,9 @@ import 'package:sportsnews/screens/category_pages/all_news.dart';
 import 'package:sportsnews/screens/favourite.dart';
 import 'package:sportsnews/screens/home_screen.dart';
 import 'package:sportsnews/services/utils.dart';
+import 'package:sportsnews/providers/search_news_provider.dart';
+import 'package:provider/provider.dart';
+
 import 'package:sportsnews/widgets/drawer_widget.dart';
 import 'package:sportsnews/widgets/snackbar.dart';
 
@@ -69,14 +73,35 @@ class _MainHomeScreenState extends State<MainHomeScreen>
   // deeplink
 
   // Get any initial links
+  // Future<void> initDynamicLinks(BuildContext context) async {
+  //   final searchNewsProvider = Provider.of<SearchNewsProvider>(context);
+  //   try {
+  //     //await searchNewsProvider.fetchAllNews();
+  //     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+  //       final Uri deepLink = dynamicLinkData.link;
+
+  //       handleDeepLink(deepLink);
+  //     }).onError((error) {
+  //       print('onLink error');
+  //       print(error.message);
+  //     });
+  //   } catch (error) {
+  //     print('Fetch news error: $error');
+  //   }
+  // }
 
   Future<void> initDynamicLinks(BuildContext context) async {
-    // await Future.delayed(Duration(seconds: 1));
+    //await Future.delayed(Duration(seconds: 1));
+    //final searchNewsProvider = Provider.of<SearchNewsProvider>(context);
+
+    //await searchNewsProvider.fetchAllNews();
+
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+      print("DYnamic Link Started");
+
       final Uri deepLink = dynamicLinkData.link;
-      if (deepLink != null) {
-        handleDeepLink(deepLink);
-      }
+      //deepLink != null
+      handleDeepLink(deepLink);
     }).onError((error) {
       print('onLink error');
       print(error.message);
@@ -85,7 +110,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
 
   //initial
   Future<void> handleInitialLink() async {
-    await Future.delayed(Duration(seconds: 1));
+    //await Future.delayed(Duration(seconds: 1));
     final PendingDynamicLinkData? initialLink =
         await FirebaseDynamicLinks.instance.getInitialLink();
     if (initialLink != null) {
@@ -94,6 +119,23 @@ class _MainHomeScreenState extends State<MainHomeScreen>
       handleDeepLink(deepLink);
     }
   }
+
+  // Future<void> handleInitialLink(BuildContext context) async {
+  //   final searchNewsProvider = Provider.of<SearchNewsProvider>(context);
+  //   try {
+  //     await searchNewsProvider.fetchAllNews();
+  //     //await Future.delayed(Duration(seconds: 1));
+  //     final PendingDynamicLinkData? initialLink =
+  //         await FirebaseDynamicLinks.instance.getInitialLink();
+  //     if (initialLink != null) {
+  //       final Uri deepLink = initialLink.link;
+
+  //       handleDeepLink(deepLink);
+  //     }
+  //   } catch (error) {
+  //     print('Fetch news error: $error');
+  //   }
+  // }
 
   //handle deep link
   void handleDeepLink(Uri deepLink) {

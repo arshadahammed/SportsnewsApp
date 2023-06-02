@@ -15,7 +15,8 @@ import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/providers/popular_news_provider.dart';
 import 'package:sportsnews/providers/toptrending_provider.dart';
 import 'package:cross_file/cross_file.dart';
-
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
 import '../consts/styles.dart';
 import '../providers/bookmarks_provider.dart';
 import '../providers/news_provider.dart';
@@ -35,11 +36,11 @@ class TopTrendingNewsDetails extends StatefulWidget {
 class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
   bool _isFavorite = false;
   List<String> _favoriteIds = [];
-  //bool isInBookmark = false;
-  //String? publishedAt;
-  //String? newsId;
-  //dynamic currBookmark;
-  @override
+
+  //ads
+  NativeAd? _nativeAd;
+  bool isNativeAdLoaded = false;
+  // @override
   // void didChangeDependencies() {
   //   publishedAt = ModalRoute.of(context)!.settings.arguments as String;
   //   super.didChangeDependencies();
@@ -50,6 +51,37 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
     setState(() {
       _favoriteIds = prefs.getStringList('favoriteIds') ?? [];
     });
+  }
+
+  void loadNativeAd() {
+    _nativeAd = NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId,
+      factoryId: "listTileMedium",
+      listener: NativeAdListener(onAdLoaded: (ad) {
+        setState(() {
+          isNativeAdLoaded = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        _nativeAd!.dispose();
+      }),
+      request: const AdRequest(),
+    );
+    _nativeAd!.load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadNativeAd();
+    // _createInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    //_interstitialAd?.dispose();
+    _nativeAd!.dispose();
   }
 
   @override
@@ -146,6 +178,18 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
                   ),
                 ),
               ),
+              //native ads
+              isNativeAdLoaded
+                  ? Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      height: 265,
+                      child: AdWidget(
+                        ad: _nativeAd!,
+                      ),
+                    )
+                  : const SizedBox(),
               Positioned(
                 bottom: 0,
                 right: 10,
@@ -281,6 +325,19 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
+                //ads
+                //native ads
+                isNativeAdLoaded
+                    ? Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        height: 265,
+                        child: AdWidget(
+                          ad: _nativeAd!,
+                        ),
+                      )
+                    : const SizedBox(),
                 const VerticalSpacing(
                   20,
                 ),

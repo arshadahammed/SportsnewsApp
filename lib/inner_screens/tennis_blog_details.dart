@@ -2,9 +2,11 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/all_news_provider.dart';
@@ -32,15 +34,45 @@ class TennisNewsDetails extends StatefulWidget {
 class _TennisNewsDetailsState extends State<TennisNewsDetails> {
   bool _isFavorite = false;
   List<String> _favoriteIds = [];
-  //bool isInBookmark = false;
-  //String? publishedAt;
-  //String? newsId;
-  //dynamic currBookmark;
-  @override
+  NativeAd? _nativeAd;
+  bool isNativeAdLoaded = false;
+
+  //@override
   // void didChangeDependencies() {
   //   publishedAt = ModalRoute.of(context)!.settings.arguments as String;
   //   super.didChangeDependencies();
   // }
+
+  void loadNativeAd() {
+    _nativeAd = NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId,
+      factoryId: "listTileMedium",
+      listener: NativeAdListener(onAdLoaded: (ad) {
+        setState(() {
+          isNativeAdLoaded = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        _nativeAd!.dispose();
+      }),
+      request: const AdRequest(),
+    );
+    _nativeAd!.load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadNativeAd();
+    // _createInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    //_interstitialAd?.dispose();
+    _nativeAd!.dispose();
+  }
 
   Future<void> _getFavorites() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -143,6 +175,17 @@ class _TennisNewsDetailsState extends State<TennisNewsDetails> {
                   ),
                 ),
               ),
+              isNativeAdLoaded
+                  ? Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      height: 265,
+                      child: AdWidget(
+                        ad: _nativeAd!,
+                      ),
+                    )
+                  : const SizedBox(),
               Positioned(
                 bottom: 0,
                 right: 10,
@@ -246,6 +289,17 @@ class _TennisNewsDetailsState extends State<TennisNewsDetails> {
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
+                isNativeAdLoaded
+                    ? Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        height: 265,
+                        child: AdWidget(
+                          ad: _nativeAd!,
+                        ),
+                      )
+                    : const SizedBox(),
                 const VerticalSpacing(
                   20,
                 ),

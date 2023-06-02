@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:sportsnews/screens/main_homescreen.dart";
+import 'package:sportsnews/providers/all_news_provider.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -14,21 +16,33 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // appOpenAdManager.loadAd();
     //set time to load the new page
-    Future.delayed(const Duration(seconds: 8), () {
-      //appOpenAdManager.showAdIfAvailable();
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainHomeScreen(),
-          ));
-    });
+    // Future.delayed(const Duration(seconds: 8), () {
+    //   //appOpenAdManager.showAdIfAvailable();
+    //   Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => MainHomeScreen(),
+    //       ));
+    // });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final dataProvider = Provider.of<AllNewsProvider>(context, listen: false);
+
+    // Fetch data when the SplashScreen widget is built
+    dataProvider.fetchAllNews().then((_) {
+      // Data fetched, navigate to the next screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => MainHomeScreen(),
+        ),
+      );
+    });
+
     return Scaffold(
-      backgroundColor: Colors.brown.withOpacity(0.7),
+      backgroundColor: Colors.white,
       body: Container(
         alignment: Alignment.center,
         child: Column(
@@ -40,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
               width: 200,
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('assets/png/logo.png'),
+                      image: AssetImage('assets/png/logo2.png'),
                       fit: BoxFit.cover)),
             ),
             // const SizedBox(height: 10),
@@ -57,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       bottomNavigationBar: Container(
         height: 50,
-        color: Colors.brown.withOpacity(0.7),
+        color: Colors.white,
         alignment: Alignment.center,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

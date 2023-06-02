@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
+import 'package:sportsnews/providers/all_news_provider.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/providers/search_news_provider.dart';
 
@@ -53,7 +54,7 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final color = Utils(context).getColor;
-    final newsProvider = Provider.of<SearchNewsProvider>(context);
+    final newsProvider = Provider.of<AllNewsProvider>(context);
     //final bookmarksProvider = Provider.of<BookmarksProvider>(context);
 
     final currentNews = newsProvider.findById(id: newsId);

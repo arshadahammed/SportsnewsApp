@@ -9,11 +9,11 @@ class ThemeProvider with ChangeNotifier {
   bool _darkTheme = false;
   bool get getDarkTheme => _darkTheme;
 
-  void toggleTheme() {
-    setDarkTheme = !getDarkTheme;
-    darkThemePreferences.setDarkTheme(getDarkTheme);
-    notifyListeners();
-  }
+  // void toggleTheme() {
+  //   setDarkTheme = !getDarkTheme;
+  //   darkThemePreferences.setDarkTheme(getDarkTheme);
+  //   notifyListeners();
+  // }
 
   set setDarkTheme(bool value) {
     _darkTheme = value;

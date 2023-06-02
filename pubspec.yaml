@@ -68,6 +68,7 @@ dependencies:
   collection: ^1.17.0
   path_provider: ^2.0.15
   upgrader: ^6.3.0
+  google_mobile_ads: ^2.4.0
 
   
 
