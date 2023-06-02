@@ -38,8 +38,11 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
   List<String> _favoriteIds = [];
 
   //ads
-  NativeAd? _nativeAd;
-  bool isNativeAdLoaded = false;
+  NativeAd? _nativeAd1;
+  bool isNativeAdLoaded1 = false;
+
+  NativeAd? _nativeAd2;
+  bool isNativeAdLoaded2 = false;
   // @override
   // void didChangeDependencies() {
   //   publishedAt = ModalRoute.of(context)!.settings.arguments as String;
@@ -53,27 +56,45 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
     });
   }
 
-  void loadNativeAd() {
-    _nativeAd = NativeAd(
+  void loadNativeAd1() {
+    _nativeAd1 = NativeAd(
       adUnitId: AdHelper.nativeAdUnitId,
       factoryId: "listTileMedium",
       listener: NativeAdListener(onAdLoaded: (ad) {
         setState(() {
-          isNativeAdLoaded = true;
+          isNativeAdLoaded1 = true;
         });
       }, onAdFailedToLoad: (ad, error) {
-        _nativeAd!.dispose();
+        _nativeAd1!.dispose();
       }),
       request: const AdRequest(),
     );
-    _nativeAd!.load();
+    _nativeAd1!.load();
+  }
+
+  void loadNativeAd2() {
+    _nativeAd2 = NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId2,
+      factoryId: "listTileMedium",
+      listener: NativeAdListener(onAdLoaded: (ad) {
+        setState(() {
+          isNativeAdLoaded2 = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        _nativeAd2!.dispose();
+      }),
+      request: const AdRequest(),
+    );
+    _nativeAd2!.load();
   }
 
   @override
   void initState() {
     super.initState();
 
-    loadNativeAd();
+    loadNativeAd1();
+    loadNativeAd2();
+
     // _createInterstitialAd();
   }
 
@@ -81,7 +102,8 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
   void dispose() {
     super.dispose();
     //_interstitialAd?.dispose();
-    _nativeAd!.dispose();
+    _nativeAd1!.dispose();
+    _nativeAd2!.dispose();
   }
 
   @override
@@ -178,18 +200,6 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
                   ),
                 ),
               ),
-              //native ads
-              isNativeAdLoaded
-                  ? Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      height: 265,
-                      child: AdWidget(
-                        ad: _nativeAd!,
-                      ),
-                    )
-                  : const SizedBox(),
               Positioned(
                 bottom: 0,
                 right: 10,
@@ -308,7 +318,23 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
               )
             ],
           ),
+          //native ads
           const VerticalSpacing(20),
+
+          isNativeAdLoaded1
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    height: 265,
+                    child: AdWidget(
+                      ad: _nativeAd1!,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Column(
@@ -327,20 +353,21 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
                 ),
                 //ads
                 //native ads
-                isNativeAdLoaded
+                const VerticalSpacing(
+                  10,
+                ),
+                isNativeAdLoaded2
                     ? Container(
                         decoration: const BoxDecoration(
                           color: Colors.white,
                         ),
                         height: 265,
                         child: AdWidget(
-                          ad: _nativeAd!,
+                          ad: _nativeAd2!,
                         ),
                       )
                     : const SizedBox(),
-                const VerticalSpacing(
-                  20,
-                ),
+
                 const TextContent(
                   label: 'Contents',
                   fontSize: 20,

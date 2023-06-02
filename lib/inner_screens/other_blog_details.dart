@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'package:cross_file/cross_file.dart';
+
+import 'package:dio/dio.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,10 +36,12 @@ class OtherNewsDetails extends StatefulWidget {
 class _OtherNewsDetailsState extends State<OtherNewsDetails> {
   bool _isFavorite = false;
   List<String> _favoriteIds = [];
-  NativeAd? _nativeAd;
-  bool isNativeAdLoaded = false;
+  NativeAd? _nativeAd1;
+  bool isNativeAdLoaded1 = false;
 
-  //@override
+  NativeAd? _nativeAd2;
+  bool isNativeAdLoaded2 = false;
+  // @override
   // void didChangeDependencies() {
   //   publishedAt = ModalRoute.of(context)!.settings.arguments as String;
   //   super.didChangeDependencies();
@@ -47,27 +54,45 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
     });
   }
 
-  void loadNativeAd() {
-    _nativeAd = NativeAd(
+  void loadNativeAd1() {
+    _nativeAd1 = NativeAd(
       adUnitId: AdHelper.nativeAdUnitId,
       factoryId: "listTileMedium",
       listener: NativeAdListener(onAdLoaded: (ad) {
         setState(() {
-          isNativeAdLoaded = true;
+          isNativeAdLoaded1 = true;
         });
       }, onAdFailedToLoad: (ad, error) {
-        _nativeAd!.dispose();
+        _nativeAd1!.dispose();
       }),
       request: const AdRequest(),
     );
-    _nativeAd!.load();
+    _nativeAd1!.load();
+  }
+
+  void loadNativeAd2() {
+    _nativeAd1 = NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId2,
+      factoryId: "listTileMedium",
+      listener: NativeAdListener(onAdLoaded: (ad) {
+        setState(() {
+          isNativeAdLoaded2 = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        _nativeAd2!.dispose();
+      }),
+      request: const AdRequest(),
+    );
+    _nativeAd2!.load();
   }
 
   @override
   void initState() {
     super.initState();
 
-    loadNativeAd();
+    loadNativeAd1();
+    loadNativeAd2();
+
     // _createInterstitialAd();
   }
 
@@ -75,7 +100,8 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
   void dispose() {
     super.dispose();
     //_interstitialAd?.dispose();
-    _nativeAd!.dispose();
+    _nativeAd1!.dispose();
+    _nativeAd2!.dispose();
   }
 
   @override
@@ -172,17 +198,6 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
                   ),
                 ),
               ),
-              isNativeAdLoaded
-                  ? Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      height: 265,
-                      child: AdWidget(
-                        ad: _nativeAd!,
-                      ),
-                    )
-                  : const SizedBox(),
               Positioned(
                 bottom: 0,
                 right: 10,
@@ -193,16 +208,48 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
                       GestureDetector(
                         onTap: () async {
                           try {
-                            // await Share.share(currentNews.url,
-
-                            //     subject: 'Look what I made!');
+                            //dynamic link
                             String generatedDeepLink =
                                 await FirebaseDynamicLinkService
                                     .createDynamicLink(false, currentNews);
                             print(generatedDeepLink);
                             print(currentNews.newsId);
-                            await Share.share(generatedDeepLink,
-                                subject: 'Look what I made!');
+                            // await Share.share(generatedDeepLink,
+                            //     subject: 'Look what I made!');
+
+                            //imgesend
+                            //image download
+                            String url = currentNews.urlToImage;
+                            Dio dio = Dio();
+                            Response response = await dio.get(
+                              url,
+                              options:
+                                  Options(responseType: ResponseType.bytes),
+                            );
+                            Directory tempDir = await getTemporaryDirectory();
+
+                            final path = '${tempDir.path}/image.jpg';
+                            File file = File(path);
+                            file.createSync();
+                            file.writeAsBytesSync(response.data);
+                            if (file.existsSync() == true) {
+                              // await Share.shareXFiles(
+                              //   [Xfile(file.path)],
+
+                              // );
+                              String subject =
+                                  "*${currentNews.content}*\n\n*Read News From here*:-\n\n$generatedDeepLink";
+                              await Share.shareXFiles(
+                                [XFile(file.path)],
+                                text: subject,
+                              );
+                              // await Share.share('dsdss',
+                              //     subject: "helloooooooo");
+
+                              //await Share.shareFiles([path], text: "hello");
+                            }
+
+                            //await Share.shareFiles([path], text: "hello");
                           } catch (err) {
                             GlobalMethods.errorDialog(
                                 errorMessage: err.toString(), context: context);
@@ -270,6 +317,20 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
             ],
           ),
           const VerticalSpacing(20),
+          isNativeAdLoaded1
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    height: 265,
+                    child: AdWidget(
+                      ad: _nativeAd1!,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Column(
@@ -286,14 +347,14 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
-                isNativeAdLoaded
+                isNativeAdLoaded2
                     ? Container(
                         decoration: const BoxDecoration(
                           color: Colors.white,
                         ),
                         height: 265,
                         child: AdWidget(
-                          ad: _nativeAd!,
+                          ad: _nativeAd2!,
                         ),
                       )
                     : const SizedBox(),

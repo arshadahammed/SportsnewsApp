@@ -2,8 +2,11 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/all_news_provider.dart';
@@ -27,28 +30,81 @@ class DeepLinkNewsDetailsScreen extends StatefulWidget {
 }
 
 class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
-  bool isInBookmark = false;
-  String? publishedAt;
+  //String? publishedAt;
   String? newsId;
-  dynamic currBookmark;
+
+  bool _isFavorite = false;
+  List<String> _favoriteIds = [];
+
+  NativeAd? _nativeAd1;
+  bool isNativeAdLoaded1 = false;
+
+  NativeAd? _nativeAd2;
+  bool isNativeAdLoaded2 = false;
+
   @override
   void didChangeDependencies() {
-    publishedAt = ModalRoute.of(context)!.settings.arguments as String;
+    //publishedAt = ModalRoute.of(context)!.settings.arguments as String;
     newsId = ModalRoute.of(context)!.settings.arguments as String;
-    // final List<BookmarksModel> bookmarkList =
-    //     Provider.of<BookmarksProvider>(context).getBookmarkList;
-    // if (bookmarkList.isEmpty) {
-    //   return;
-    // }
-    // currBookmark = bookmarkList
-    //     .where((element) => element.publishedAt == publishedAt)
-    //     .toList();
-    // if (currBookmark.isEmpty) {
-    //   isInBookmark = false;
-    // } else {
-    //   isInBookmark = true;
-    // }
+
     super.didChangeDependencies();
+  }
+
+  Future<void> _getFavorites() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _favoriteIds = prefs.getStringList('favoriteIds') ?? [];
+    });
+  }
+
+  void loadNativeAd1() {
+    _nativeAd1 = NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId,
+      factoryId: "listTileMedium",
+      listener: NativeAdListener(onAdLoaded: (ad) {
+        setState(() {
+          isNativeAdLoaded1 = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        _nativeAd1!.dispose();
+      }),
+      request: const AdRequest(),
+    );
+    _nativeAd1!.load();
+  }
+
+  void loadNativeAd2() {
+    _nativeAd1 = NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId2,
+      factoryId: "listTileMedium",
+      listener: NativeAdListener(onAdLoaded: (ad) {
+        setState(() {
+          isNativeAdLoaded2 = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        _nativeAd2!.dispose();
+      }),
+      request: const AdRequest(),
+    );
+    _nativeAd2!.load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadNativeAd1();
+    loadNativeAd2();
+
+    // _createInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    //_interstitialAd?.dispose();
+    _nativeAd1!.dispose();
+    _nativeAd2!.dispose();
   }
 
   @override
@@ -59,9 +115,6 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
 
     final currentNews = newsProvider.findById(id: newsId);
 
-    // final currentNews = newsId == null
-    //   ? newsProvider.findByDate(publishedAt: publishedAt)
-    //   : newsProvider.findById(id: newsId);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: color),
@@ -92,7 +145,7 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
               children: [
                 Text(
                   currentNews.title,
-                  textAlign: TextAlign.justify,
+                  textAlign: TextAlign.start,
                   style: titleTextStyle,
                 ),
                 const VerticalSpacing(25),
@@ -167,18 +220,43 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () async {},
+                        onTap: () async {
+                          setState(() {
+                            _isFavorite = !_isFavorite;
+                          });
+                          // await _updateFavorites();
+
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          List<String> favoriteIds =
+                              prefs.getStringList('favoriteIds') ?? [];
+                          setState(() {
+                            if (_favoriteIds.contains(currentNews.newsId)) {
+                              print("Id already exist");
+                              return;
+                            }
+                            if (_isFavorite) {
+                              favoriteIds.add(currentNews.newsId);
+                              print("After added : ${favoriteIds.length}");
+                            } else {
+                              favoriteIds.remove(currentNews.newsId);
+                              //  print("After removed : ${favoriteIds.length}");
+                            }
+                          });
+
+                          await prefs.setStringList('favoriteIds', favoriteIds);
+                        },
                         child: Card(
                           elevation: 10,
                           shape: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
-                              isInBookmark
+                              _isFavorite
                                   ? IconlyBold.bookmark
                                   : IconlyLight.bookmark,
                               size: 28,
-                              color: isInBookmark ? Colors.green : color,
+                              color: _isFavorite ? Colors.red : color,
                             ),
                           ),
                         ),
@@ -190,6 +268,20 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
             ],
           ),
           const VerticalSpacing(20),
+          isNativeAdLoaded1
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    height: 265,
+                    child: AdWidget(
+                      ad: _nativeAd1!,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Column(
@@ -201,11 +293,22 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
                   fontWeight: FontWeight.bold,
                 ),
                 const VerticalSpacing(10),
-                TextContent(
+                TextDescription(
                   label: currentNews.description,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
+                isNativeAdLoaded2
+                    ? Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        height: 265,
+                        child: AdWidget(
+                          ad: _nativeAd2!,
+                        ),
+                      )
+                    : const SizedBox(),
                 const VerticalSpacing(
                   20,
                 ),
@@ -231,6 +334,29 @@ class _DeepLinkNewsDetailsScreenState extends State<DeepLinkNewsDetailsScreen> {
   }
 }
 
+class TextDescription extends StatelessWidget {
+  const TextDescription({
+    Key? key,
+    required this.label,
+    required this.fontSize,
+    required this.fontWeight,
+  }) : super(key: key);
+
+  final String label;
+  final double fontSize;
+  final FontWeight fontWeight;
+  @override
+  Widget build(BuildContext context) {
+    return SelectableText(
+      label,
+      textAlign: TextAlign.center,
+      style: GoogleFonts.roboto(fontSize: fontSize, fontWeight: fontWeight),
+    );
+  }
+
+  //content
+}
+
 class TextContent extends StatelessWidget {
   const TextContent({
     Key? key,
@@ -246,7 +372,7 @@ class TextContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SelectableText(
       label,
-      textAlign: TextAlign.justify,
+      textAlign: TextAlign.start,
       style: GoogleFonts.roboto(fontSize: fontSize, fontWeight: fontWeight),
     );
   }

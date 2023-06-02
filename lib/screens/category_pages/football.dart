@@ -3,6 +3,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/football_news_provider.dart';
 import 'package:sportsnews/providers/news_provider.dart';
@@ -22,10 +24,47 @@ class FootballNews extends StatefulWidget {
 
 class _FootballNewsState extends State<FootballNews> {
   int currentPageIndex = 0;
-  int perPage = 2;
+  int perPage = 4;
   int futureBuilderItemCount = 0;
 
   ScrollController _scrollController = ScrollController();
+    //ads
+  final adPosition = 2;
+  late BannerAd _inlineBannerAd;
+  bool _isInlineBannerAdLoaded = false;
+
+  //inline Ad
+  void _createInlineBannerAd() {
+    _inlineBannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.mediumRectangle,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isInlineBannerAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+        },
+      ),
+    );
+    _inlineBannerAd.load();
+  }
+
+    @override
+  void initState() {
+    super.initState();
+
+    _createInlineBannerAd();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _inlineBannerAd.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,28 +202,41 @@ class _FootballNewsState extends State<FootballNews> {
                       ),
                     );
                   }
+                  //FootballArticlesWidget
                   return Expanded(
                     child: ListView.builder(
                         //(currentPageIndex + 1) * perPage
                         //itemCount: snapshot.data!.length,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (ctx, index) {
-                          if (index >= (currentPageIndex * perPage) &&
-                              index < ((currentPageIndex + 1) * perPage)) {
-                            return ChangeNotifierProvider.value(
-                              value: snapshot.data![index],
-                              child: const FootballArticlesWidget(
-                                  // imageUrl: snapshot.data![index].,
-                                  // dateToShow: snapshot.data![index].dateToShow,
-                                  // readingTime:
-                                  //     snapshot.data![index].readingTimeText,
-                                  // title: snapshot.data![index].title,
-                                  // url: snapshot.data![index].url,
-                                  ),
-                            );
+                          if (index == adPosition) {
+                            // Render the ad widget
+                            return Container(
+                              padding: const EdgeInsets.only(
+                                bottom: 10,
+                              ),
+                              width: _inlineBannerAd.size.width.toDouble(),
+                              height: _inlineBannerAd.size.height.toDouble(),
+                              child: AdWidget(ad: _inlineBannerAd),
+                            ); // Replace with your ad widget implementation
                           } else {
-                            // Show an empty SizedBox to keep the ListView height consistent
-                            return SizedBox.shrink();
+                            // Calculate the actual index excluding the ad position
+                            int actualIndex =
+                                index - (index > adPosition ? 1 : 0);
+
+                            if (actualIndex >= (currentPageIndex * perPage) &&
+                                actualIndex <
+                                    ((currentPageIndex + 1) * perPage)) {
+                              // Render the article widget
+                              return ChangeNotifierProvider.value(
+                                value: snapshot.data![actualIndex],
+                                child: const FootballArticlesWidget(
+                                    // Rest of your code for rendering articles
+                                    ),
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
                           }
                         }),
                   );

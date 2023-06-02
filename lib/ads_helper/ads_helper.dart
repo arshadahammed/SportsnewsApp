@@ -31,7 +31,17 @@ class AdHelper {
     }
   }
 
-  //native android
+  //native android2
+  static String get nativeAdUnitId2 {
+    if (Platform.isAndroid) {
+      return "ca-app-pub-3940256099942544/2247696110";
+    } else if (Platform.isIOS) {
+      return "ca-app-pub-3940256099942544/2247696110";
+    } else {
+      throw UnsupportedError('Unsupported platform');
+    }
+  }
+
   // ca-app-pub-3940256099942544/2247696110
 
   //native Ios

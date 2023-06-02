@@ -1,7 +1,10 @@
 import "package:flutter/material.dart";
+import 'package:sportsnews/ads_helper/app_open_admanager.dart';
+import 'package:sportsnews/providers/theme_provider.dart';
 import "package:sportsnews/screens/main_homescreen.dart";
 import 'package:sportsnews/providers/all_news_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:sportsnews/services/utils.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -11,38 +14,58 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  ///AppOpenAdManager appOpenAdManager = AppOpenAdManager();
+  AppOpenAdManager appOpenAdManager = AppOpenAdManager();
   @override
   void initState() {
-    // appOpenAdManager.loadAd();
+    appOpenAdManager.loadAd();
     //set time to load the new page
-    // Future.delayed(const Duration(seconds: 8), () {
+    // Future.delayed(const Duration(seconds: 4), () {
     //   //appOpenAdManager.showAdIfAvailable();
-    //   Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => MainHomeScreen(),
-    //       ));
+    //   // Navigator.pushReplacement(
+    //   //     context,
+    //   //     MaterialPageRoute(
+    //   //       builder: (context) => MainHomeScreen(),
+    //   //     ));
     // });
     super.initState();
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final Color color = Utils(context).getColor;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    bool isDarkMode = themeProvider.getDarkTheme;
+
     final dataProvider = Provider.of<AllNewsProvider>(context, listen: false);
 
     // Fetch data when the SplashScreen widget is built
     dataProvider.fetchAllNews().then((_) {
       // Data fetched, navigate to the next screen
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => MainHomeScreen(),
-        ),
-      );
+
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) => MainHomeScreen(),
+      //   ),
+      // );
+      Future.delayed(Duration(seconds: 4), () {
+        appOpenAdManager.showAdIfAvailable();
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => MainHomeScreen(),
+          ),
+        );
+      });
     });
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
         alignment: Alignment.center,
         child: Column(
@@ -71,13 +94,16 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       bottomNavigationBar: Container(
         height: 50,
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         alignment: Alignment.center,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
               "Powered by ",
+              style: TextStyle(
+                color: isDarkMode ? Colors.white : Colors.black,
+              ),
             ),
             Text(
               "SeyFert Soft&Tech",

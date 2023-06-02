@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   } else if (snapshot.hasError) {
                     return Container(
-                      height: 300,
+                      height: 200,
                       width: size.width,
                       child: const Expanded(
                         child: Center(child: CircularProgressIndicator()),
@@ -244,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return PopularLoadingWidget();
                   } else if (snapshot.hasError) {
                     return Container(
-                      height: 300,
+                      height: 200,
                       width: size.width,
                       child: Expanded(
                           child: Center(child: CircularProgressIndicator())
