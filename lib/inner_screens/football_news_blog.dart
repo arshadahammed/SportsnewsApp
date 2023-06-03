@@ -199,17 +199,6 @@ class _FootballNewsDetailsState extends State<FootballNewsDetails> {
                   ),
                 ),
               ),
-              isNativeAdLoaded2
-                  ? Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      height: 265,
-                      child: AdWidget(
-                        ad: _nativeAd2!,
-                      ),
-                    )
-                  : const SizedBox(),
               Positioned(
                 bottom: 0,
                 right: 10,

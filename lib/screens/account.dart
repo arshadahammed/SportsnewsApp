@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/providers/theme_provider.dart';
 import 'package:sportsnews/screens/contact_us.dart';
 import 'package:sportsnews/screens/favourite.dart';
@@ -26,50 +28,50 @@ class _AccountPageState extends State<AccountPage> {
   //ads
   int _interstitialLoadAttempts = 0;
 
-  // InterstitialAd? _interstitialAd;
+  InterstitialAd? _interstitialAd;
 
-  // //intrestial
-  // void _createInterstitialAd() {
-  //   InterstitialAd.load(
-  //       adUnitId: AdHelper.interstitialAdUnitId,
-  //       request: const AdRequest(),
-  //       adLoadCallback:
-  //           InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
-  //         _interstitialAd = ad;
-  //         _interstitialLoadAttempts = 0;
-  //       }, onAdFailedToLoad: (LoadAdError error) {
-  //         _interstitialLoadAttempts += 1;
-  //         _interstitialAd = null;
-  //         if (_interstitialLoadAttempts <= maxFailedLoadAttempts) {
-  //           _createInterstitialAd();
-  //         }
-  //       }));
-  // }
+  //intrestial
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AdHelper.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback:
+            InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _interstitialLoadAttempts = 0;
+        }, onAdFailedToLoad: (LoadAdError error) {
+          _interstitialLoadAttempts += 1;
+          _interstitialAd = null;
+          if (_interstitialLoadAttempts <= maxFailedLoadAttempts) {
+            _createInterstitialAd();
+          }
+        }));
+  }
 
-  // void _showInterstitialAd() {
-  //   if (_interstitialAd != null) {
-  //     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-  //         onAdDismissedFullScreenContent: (InterstitialAd ad) {
-  //       ad.dispose();
-  //       _createInterstitialAd();
-  //     }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-  //       ad.dispose();
-  //       _createInterstitialAd();
-  //     });
-  //     _interstitialAd!.show();
-  //   }
-  // }
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+          onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        ad.dispose();
+        _createInterstitialAd();
+      }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        ad.dispose();
+        _createInterstitialAd();
+      });
+      _interstitialAd!.show();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    //_createInterstitialAd();
+    _createInterstitialAd();
   }
 
   @override
   void dispose() {
     super.dispose();
-    //_interstitialAd?.dispose();
+    _interstitialAd?.dispose();
   }
 
   @override
@@ -234,16 +236,16 @@ class _AccountPageState extends State<AccountPage> {
                   color: Colors.grey.withOpacity(0.8),
                 ),
               ),
-              SettingItem(
-                title: "Bookmark",
-                titleColor: color,
-                leadingIcon: "assets/icons/bookmark.svg",
-                bgIconColor: primary,
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const SplashScreen()));
-                },
-              ),
+              // SettingItem(
+              //   title: "Bookmark",
+              //   titleColor: color,
+              //   leadingIcon: "assets/icons/bookmark.svg",
+              //   bgIconColor: primary,
+              //   onTap: () {
+              //     Navigator.of(context).push(MaterialPageRoute(
+              //         builder: (context) => const SplashScreen()));
+              //   },
+              // ),
             ]),
           ),
           const SizedBox(
@@ -321,7 +323,7 @@ class _AccountPageState extends State<AccountPage> {
                 leadingIcon: "assets/icons/logout.svg",
                 bgIconColor: darker,
                 onTap: () {
-                  //_showInterstitialAd();
+                  _showInterstitialAd();
                   SystemNavigator.pop();
                 },
               ),

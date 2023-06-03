@@ -319,11 +319,11 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
             ],
           ),
           //native ads
-          const VerticalSpacing(20),
+          // const VerticalSpacing(20),
 
           isNativeAdLoaded1
               ? Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: Container(
                     decoration: const BoxDecoration(
                       color: Colors.white,

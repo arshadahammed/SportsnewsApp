@@ -209,7 +209,7 @@ class _TennisNewsState extends State<TennisNews> {
                         //itemCount: snapshot.data!.length,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (ctx, index) {
-                          if (index == adPosition) {
+                          if (index == adPosition && _isInlineBannerAdLoaded) {
                             // Render the ad widget
                             return Container(
                               padding: const EdgeInsets.only(

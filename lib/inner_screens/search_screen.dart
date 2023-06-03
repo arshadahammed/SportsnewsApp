@@ -3,7 +3,9 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/widgets/vertical_spacing.dart';
 
@@ -23,11 +25,37 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   late final TextEditingController _searchTextController;
   late final FocusNode focusNode;
+
+  final adPosition = 0;
+  late BannerAd _inlineBannerAd;
+  bool _isInlineBannerAdLoaded = false;
+
+//inline Ad
+  void _createInlineBannerAd() {
+    _inlineBannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.mediumRectangle,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isInlineBannerAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+        },
+      ),
+    );
+    _inlineBannerAd.load();
+  }
+
   @override
   void initState() {
     super.initState();
     _searchTextController = TextEditingController();
     focusNode = FocusNode();
+    _createInlineBannerAd();
   }
 
   List<NewsModel>? searchList = [];
@@ -39,6 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
       focusNode.dispose();
     }
     super.dispose();
+    _inlineBannerAd.dispose();
   }
 
   @override
@@ -162,12 +191,28 @@ class _SearchScreenState extends State<SearchScreen> {
             if (searchList != null && searchList!.isNotEmpty)
               Expanded(
                 child: ListView.builder(
-                    itemCount: searchList!.length,
+                    itemCount: searchList!.length + 1,
                     itemBuilder: (ctx, index) {
-                      return ChangeNotifierProvider.value(
-                        value: searchList![index],
-                        child: const ArticlesWidget(),
-                      );
+                      if (index == adPosition && _isInlineBannerAdLoaded) {
+                        // Render the ad widget
+                        return Container(
+                          padding: const EdgeInsets.only(
+                            bottom: 10,
+                          ),
+                          width: _inlineBannerAd.size.width.toDouble(),
+                          height: _inlineBannerAd.size.height.toDouble(),
+                          child: AdWidget(ad: _inlineBannerAd),
+                        ); //  // Replace with your ad widget implementation
+                      } else {
+                        // Calculate the actual index excluding the ad position
+                        int actualIndex =
+                            index > adPosition ? index - 1 : index;
+
+                        return ChangeNotifierProvider.value(
+                          value: searchList![actualIndex],
+                          child: const ArticlesWidget(),
+                        );
+                      }
                     }),
               ),
           ],

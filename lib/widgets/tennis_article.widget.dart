@@ -97,23 +97,23 @@ class TennisArticlesWidget extends StatelessWidget {
                           FittedBox(
                             child: Row(
                               children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.rightToLeft,
-                                          child: NewsDetailsWebView(
-                                              url: newsModelProvider.url),
-                                          inheritTheme: true,
-                                          ctx: context),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.link,
-                                    color: Colors.blue,
-                                  ),
-                                ),
+                                // IconButton(
+                                //   onPressed: () {
+                                //     Navigator.push(
+                                //       context,
+                                //       PageTransition(
+                                //           type: PageTransitionType.rightToLeft,
+                                //           child: NewsDetailsWebView(
+                                //               url: newsModelProvider.url),
+                                //           inheritTheme: true,
+                                //           ctx: context),
+                                //     );
+                                //   },
+                                //   icon: const Icon(
+                                //     Icons.link,
+                                //     color: Colors.blue,
+                                //   ),
+                                // ),
                                 Text(
                                   newsModelProvider.dateToShow,
                                   maxLines: 1,

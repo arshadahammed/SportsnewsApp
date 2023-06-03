@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/consts/global_colors.dart';
 
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -18,44 +20,44 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   // var isLoading = false;
   //ad section
   //varibles
-  // late BannerAd _bottomBannerAd;
+  late BannerAd _bottomBannerAd;
 
   bool _isBottomBannerAdLoaded = false;
 
   // // Banner Ad
-  // void _createBottomBannerAd() {
-  //   _bottomBannerAd = BannerAd(
-  //     adUnitId: AdHelper.bannerAdUnitId,
-  //     size: AdSize.banner,
-  //     request: const AdRequest(),
-  //     listener: BannerAdListener(onAdLoaded: (_) {
-  //       setState(() {
-  //         _isBottomBannerAdLoaded = true;
-  //       });
-  //     }, onAdFailedToLoad: (ad, error) {
-  //       ad.dispose();
-  //     }),
-  //   );
-  //   _bottomBannerAd.load();
-  // }
+  void _createBottomBannerAd() {
+    _bottomBannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(onAdLoaded: (_) {
+        setState(() {
+          _isBottomBannerAdLoaded = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        ad.dispose();
+      }),
+    );
+    _bottomBannerAd.load();
+  }
 
   @override
   void initState() {
     super.initState();
-    //_createBottomBannerAd();
+    _createBottomBannerAd();
   }
 
   @override
   void dispose() {
     super.dispose();
-    // _bottomBannerAd.dispose();
+    _bottomBannerAd.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appBarColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: const Text(
           "Privacy Policy",

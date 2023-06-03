@@ -28,7 +28,7 @@ class _FootballNewsState extends State<FootballNews> {
   int futureBuilderItemCount = 0;
 
   ScrollController _scrollController = ScrollController();
-    //ads
+  //ads
   final adPosition = 2;
   late BannerAd _inlineBannerAd;
   bool _isInlineBannerAdLoaded = false;
@@ -53,7 +53,7 @@ class _FootballNewsState extends State<FootballNews> {
     _inlineBannerAd.load();
   }
 
-    @override
+  @override
   void initState() {
     super.initState();
 
@@ -209,7 +209,7 @@ class _FootballNewsState extends State<FootballNews> {
                         //itemCount: snapshot.data!.length,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (ctx, index) {
-                          if (index == adPosition) {
+                          if (index == adPosition && _isInlineBannerAdLoaded) {
                             // Render the ad widget
                             return Container(
                               padding: const EdgeInsets.only(

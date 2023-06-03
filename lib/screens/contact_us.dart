@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/consts/global_colors.dart';
 
 class Contactus extends StatefulWidget {
@@ -9,25 +11,25 @@ class Contactus extends StatefulWidget {
 }
 
 class _ContactusState extends State<Contactus> {
-  // NativeAd? _nativeAd;
-  // bool isNativeAdLoaded = false;
+  NativeAd? _nativeAd;
+  bool isNativeAdLoaded = false;
 
-  // //loadNative Ad
-  // void loadNativeAd() {
-  //   _nativeAd = NativeAd(
-  //     adUnitId: AdHelper.nativeAdUnitId,
-  //     factoryId: "listTileMedium",
-  //     listener: NativeAdListener(onAdLoaded: (ad) {
-  //       setState(() {
-  //         isNativeAdLoaded = true;
-  //       });
-  //     }, onAdFailedToLoad: (ad, error) {
-  //       _nativeAd!.dispose();
-  //     }),
-  //     request: const AdRequest(),
-  //   );
-  //   _nativeAd!.load();
-  // }
+  //loadNative Ad
+  void loadNativeAd() {
+    _nativeAd = NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId,
+      factoryId: "listTileMedium",
+      listener: NativeAdListener(onAdLoaded: (ad) {
+        setState(() {
+          isNativeAdLoaded = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        _nativeAd!.dispose();
+      }),
+      request: const AdRequest(),
+    );
+    _nativeAd!.load();
+  }
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _ContactusState extends State<Contactus> {
   void dispose() {
     super.dispose();
     // _bottomBannerAd.dispose();
-    //_nativeAd!.dispose();
+    _nativeAd!.dispose();
     // _interstitialAd?.dispose();
   }
 
@@ -47,7 +49,8 @@ class _ContactusState extends State<Contactus> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appBarColor,
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: const Text(
           "Contact",
@@ -117,17 +120,20 @@ class _ContactusState extends State<Contactus> {
                 const Divider(),
                 //ad section
 
-                // isNativeAdLoaded
-                //     ? Container(
-                //         decoration: const BoxDecoration(
-                //           color: Colors.white,
-                //         ),
-                //         height: 265,
-                //         child: AdWidget(
-                //           ad: _nativeAd!,
-                //         ),
-                //       )
-                //     : const SizedBox(),
+                isNativeAdLoaded
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 12, right: 12),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          height: 265,
+                          child: AdWidget(
+                            ad: _nativeAd!,
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:cross_file/cross_file.dart';
 
 import 'package:dio/dio.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
@@ -10,13 +9,18 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
+import 'package:sportsnews/providers/all_news_provider.dart';
+import 'package:sportsnews/providers/cricket_news_provider.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
+import 'package:sportsnews/providers/football_news_provider.dart';
 import 'package:sportsnews/providers/other_news_provider.dart';
 import 'package:sportsnews/providers/popular_news_provider.dart';
+import 'package:sportsnews/providers/tennis_news_provider.dart';
 
 import '../consts/styles.dart';
 import '../providers/bookmarks_provider.dart';
@@ -36,12 +40,12 @@ class OtherNewsDetails extends StatefulWidget {
 class _OtherNewsDetailsState extends State<OtherNewsDetails> {
   bool _isFavorite = false;
   List<String> _favoriteIds = [];
+
   NativeAd? _nativeAd1;
   bool isNativeAdLoaded1 = false;
-
   NativeAd? _nativeAd2;
   bool isNativeAdLoaded2 = false;
-  // @override
+  //@override
   // void didChangeDependencies() {
   //   publishedAt = ModalRoute.of(context)!.settings.arguments as String;
   //   super.didChangeDependencies();
@@ -71,7 +75,7 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
   }
 
   void loadNativeAd2() {
-    _nativeAd1 = NativeAd(
+    _nativeAd2 = NativeAd(
       adUnitId: AdHelper.nativeAdUnitId2,
       factoryId: "listTileMedium",
       listener: NativeAdListener(onAdLoaded: (ad) {
@@ -114,7 +118,7 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
     // //
     final color = Utils(context).getColor;
     final otherNewsProvider = Provider.of<OtherNewsProvider>(context);
-    //final publishedAt = ModalRoute.of(context)!.settings.arguments as String;
+    //final publishedAt = ModalRoute.of(context)!.settings.argu ments as String;
     //final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
     final newsId = ModalRoute.of(context)!.settings.arguments as String;
     final currentNews = otherNewsProvider.findById(id: newsId);
@@ -316,7 +320,9 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
               )
             ],
           ),
+          //native ads
           const VerticalSpacing(20),
+
           isNativeAdLoaded1
               ? Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -331,6 +337,7 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
                   ),
                 )
               : const SizedBox(),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Column(
@@ -347,6 +354,7 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
+                //ads
                 isNativeAdLoaded2
                     ? Container(
                         decoration: const BoxDecoration(

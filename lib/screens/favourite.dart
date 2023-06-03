@@ -3,6 +3,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/news_provider.dart';
@@ -11,6 +13,8 @@ import 'package:sportsnews/widgets/articles_widget.dart';
 import 'package:sportsnews/widgets/empty_screen.dart';
 import 'package:sportsnews/widgets/listview_loadingwidget.dart';
 import 'package:sportsnews/widgets/vertical_spacing.dart';
+
+const int maxFailedLoadAttempts = 3;
 
 class FavouriteNews extends StatefulWidget {
   const FavouriteNews({super.key});
@@ -31,14 +35,44 @@ class _FavouriteNewsState extends State<FavouriteNews> {
   List<String> _favoriteIds = [];
   bool isListEmpty = false;
 
+  int _interstitialLoadAttempts = 0;
+
+  InterstitialAd? _interstitialAd;
+
+  //inline
+  //ads
+  final adPosition = 0;
+  late BannerAd _inlineBannerAd;
+  bool _isInlineBannerAdLoaded = false;
+
+  //inline Ad
+  void _createInlineBannerAd() {
+    _inlineBannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.mediumRectangle,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isInlineBannerAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+        },
+      ),
+    );
+    _inlineBannerAd.load();
+  }
+
   //favourite
 
-  // Future<void> _getFavorites() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     _favoriteIds = prefs.getStringList('favoriteIds') ?? [];
-  //   });
-  // }
+  Future<void> _getFavorites() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _favoriteIds = prefs.getStringList('favoriteIds') ?? [];
+    });
+  }
 
   Future<void> _clearFavorites() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -52,15 +86,52 @@ class _FavouriteNewsState extends State<FavouriteNews> {
     });
   }
 
-  // void refresh() {
-  //   setState(() {});
-  // }
+  //intrestial
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AdHelper.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback:
+            InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _interstitialLoadAttempts = 0;
+        }, onAdFailedToLoad: (LoadAdError error) {
+          _interstitialLoadAttempts += 1;
+          _interstitialAd = null;
+          if (_interstitialLoadAttempts <= maxFailedLoadAttempts) {
+            _createInterstitialAd();
+          }
+        }));
+  }
 
-  //1 sec
-  // Future<void> _callRefreshAfterDelay() async {
-  //   await Future.delayed(Duration(seconds: 1)); // Delay for one second
-  //   refresh(); // Call the refresh function after the delay
-  // }
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+          onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        ad.dispose();
+        _createInterstitialAd();
+      }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        ad.dispose();
+        _createInterstitialAd();
+      });
+      _interstitialAd!.show();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getFavorites();
+    _createInlineBannerAd();
+    _createInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _interstitialAd?.dispose();
+    _inlineBannerAd.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,28 +269,41 @@ class _FavouriteNewsState extends State<FavouriteNews> {
                       ),
                     );
                   }
+                  //ArticlesWidget
                   return Expanded(
                     child: ListView.builder(
                         //(currentPageIndex + 1) * perPage
                         //itemCount: snapshot.data!.length,
-                        itemCount: snapshot.data!.length,
+                        itemCount: snapshot.data!.length + 1,
                         itemBuilder: (ctx, index) {
-                          if (index >= (currentPageIndex * perPage) &&
-                              index < ((currentPageIndex + 1) * perPage)) {
-                            return ChangeNotifierProvider.value(
-                              value: snapshot.data![index],
-                              child: const ArticlesWidget(
-                                  // imageUrl: snapshot.data![index].,
-                                  // dateToShow: snapshot.data![index].dateToShow,
-                                  // readingTime:
-                                  //     snapshot.data![index].readingTimeText,
-                                  // title: snapshot.data![index].title,
-                                  // url: snapshot.data![index].url,
-                                  ),
-                            );
+                          if (index == adPosition && _isInlineBannerAdLoaded) {
+                            // Render the ad widget
+                            return Container(
+                              padding: const EdgeInsets.only(
+                                bottom: 10,
+                              ),
+                              width: _inlineBannerAd.size.width.toDouble(),
+                              height: _inlineBannerAd.size.height.toDouble(),
+                              child: AdWidget(ad: _inlineBannerAd),
+                            ); // Replace with your ad widget implementation
                           } else {
-                            // Show an empty SizedBox to keep the ListView height consistent
-                            return SizedBox.shrink();
+                            // Calculate the actual index excluding the ad position
+                            int actualIndex =
+                                index - (index > adPosition ? 1 : 0);
+
+                            if (actualIndex >= (currentPageIndex * perPage) &&
+                                actualIndex <
+                                    ((currentPageIndex + 1) * perPage)) {
+                              // Render the article widget
+                              return ChangeNotifierProvider.value(
+                                value: snapshot.data![actualIndex],
+                                child: const ArticlesWidget(
+                                    // Rest of your code for rendering articles
+                                    ),
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
                           }
                         }),
                   );
@@ -227,14 +311,17 @@ class _FavouriteNewsState extends State<FavouriteNews> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your button's action here
-          _clearFavorites();
-          print('Button pressed!');
-        },
-        child: const Icon(Icons.clear),
-      ),
+      floatingActionButton: _favoriteIds.isNotEmpty
+          ? FloatingActionButton(
+              onPressed: () {
+                // Add your button's action here
+                _showInterstitialAd();
+                _clearFavorites();
+                print('Button pressed!');
+              },
+              child: const Icon(Icons.clear),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
