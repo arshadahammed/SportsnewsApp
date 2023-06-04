@@ -20,6 +20,7 @@ import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/providers/football_news_provider.dart';
 import 'package:sportsnews/providers/popular_news_provider.dart';
 import 'package:sportsnews/providers/tennis_news_provider.dart';
+import 'package:sportsnews/widgets/twittter_embed.dart';
 
 import '../consts/styles.dart';
 import '../providers/bookmarks_provider.dart';
@@ -354,6 +355,20 @@ class _TennisNewsDetailsState extends State<TennisNewsDetails> {
                   fontWeight: FontWeight.normal,
                 ),
                 //ads
+
+                currentNews.twitter.isNotEmpty
+                    ? SizedBox(
+                        height:
+                            550, // Adjust the height according to your needs
+                        child: TwitterEmbedd(
+                          twitterId: currentNews.twitter,
+                        ))
+                    : SizedBox.shrink(),
+
+                const VerticalSpacing(
+                  10,
+                ),
+
                 isNativeAdLoaded2
                     ? Container(
                         decoration: const BoxDecoration(

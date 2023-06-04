@@ -16,6 +16,7 @@ import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/all_news_provider.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/providers/popular_news_provider.dart';
+import 'package:sportsnews/widgets/twittter_embed.dart';
 import '../consts/styles.dart';
 import '../providers/bookmarks_provider.dart';
 import '../providers/news_provider.dart';
@@ -346,6 +347,19 @@ class _AllNewsDetailsState extends State<AllNewsDetails> {
                   label: currentNews.description,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
+                ),
+                currentNews.twitter.isNotEmpty
+                    ? SizedBox(
+                        height:
+                            550, // Adjust the height according to your needs
+                        child: TwitterEmbedd(
+                          twitterId: currentNews.twitter,
+                        ))
+                    : SizedBox.shrink(),
+
+                //native ads
+                const VerticalSpacing(
+                  10,
                 ),
                 //ads
                 isNativeAdLoaded2

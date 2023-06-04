@@ -48,20 +48,22 @@ class _SplashScreenState extends State<SplashScreen> {
     dataProvider.fetchAllNews().then((_) {
       // Data fetched, navigate to the next screen
 
-      // Navigator.of(context).pushReplacement(
-      //   MaterialPageRoute(
-      //     builder: (context) => MainHomeScreen(),
-      //   ),
-      // );
-      Future.delayed(Duration(seconds: 4), () {
-        appOpenAdManager.showAdIfAvailable();
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => MainHomeScreen(),
+        ),
+      );
+      appOpenAdManager.showAdIfAvailable();
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => MainHomeScreen(),
-          ),
-        );
-      });
+      // Future.delayed(Duration(seconds: 2), () {
+      //   Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(
+      //       builder: (context) => MainHomeScreen(),
+      //     ),
+      //   );
+      //appOpenAdManager.showAdIfAvailable();
+
+      // });
     });
 
     return Scaffold(

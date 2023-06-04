@@ -16,6 +16,7 @@ import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/providers/popular_news_provider.dart';
 import 'package:cross_file/cross_file.dart';
+import 'package:sportsnews/widgets/twittter_embed.dart';
 import '../consts/styles.dart';
 import '../providers/bookmarks_provider.dart';
 import '../providers/news_provider.dart';
@@ -90,7 +91,7 @@ class _PopularNewsDetailsState extends State<PopularNewsDetails> {
   void initState() {
     super.initState();
 
-    loadNativeAd2();
+    loadNativeAd1();
     loadNativeAd2();
 
     // _createInterstitialAd();
@@ -317,7 +318,6 @@ class _PopularNewsDetailsState extends State<PopularNewsDetails> {
             ],
           ),
           //native ads
-          const VerticalSpacing(20),
 
           isNativeAdLoaded1
               ? Padding(
@@ -349,6 +349,19 @@ class _PopularNewsDetailsState extends State<PopularNewsDetails> {
                   label: currentNews.description,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
+                ),
+                currentNews.twitter.isNotEmpty
+                    ? SizedBox(
+                        height:
+                            550, // Adjust the height according to your needs
+                        child: TwitterEmbedd(
+                          twitterId: currentNews.twitter,
+                        ))
+                    : SizedBox.shrink(),
+
+                //native ads
+                const VerticalSpacing(
+                  10,
                 ),
                 isNativeAdLoaded2
                     ? Container(

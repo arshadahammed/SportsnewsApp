@@ -79,7 +79,7 @@ class ArticlesWidget extends StatelessWidget {
                         children: [
                           Text(
                             newsModelProvider.title,
-                            textAlign: TextAlign.justify,
+                            textAlign: TextAlign.left,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: smallTextStyle,
@@ -92,34 +92,45 @@ class ArticlesWidget extends StatelessWidget {
                               style: smallTextStyle,
                             ),
                           ),
-                          FittedBox(
-                            child: Row(
-                              children: [
-                                // IconButton(
-                                //   onPressed: () {
-                                //     Navigator.push(
-                                //       context,
-                                //       PageTransition(
-                                //           type: PageTransitionType.rightToLeft,
-                                //           child: NewsDetailsWebView(
-                                //               url: newsModelProvider.url),
-                                //           inheritTheme: true,
-                                //           ctx: context),
-                                //     );
-                                //   },
-                                //   icon: const Icon(
-                                //     Icons.link,
-                                //     color: Colors.blue,
-                                //   ),
-                                // ),
-                                Text(
-                                  newsModelProvider.dateToShow,
-                                  maxLines: 1,
-                                  style: smallTextStyle,
-                                ),
-                              ],
+                          const VerticalSpacing(6),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              newsModelProvider.dateToShow,
+                              maxLines: 1,
+                              style: smallTextStyle,
                             ),
-                          )
+                          ),
+                          // FittedBox(
+                          //   child: Row(
+                          //     //crossAxisAlignment: CrossAxisAlignment.end,
+                          //     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       // IconButton(
+                          //       //   onPressed: () {
+                          //       //     Navigator.push(
+                          //       //       context,
+                          //       //       PageTransition(
+                          //       //           type: PageTransitionType.rightToLeft,
+                          //       //           child: NewsDetailsWebView(
+                          //       //               url: newsModelProvider.url),
+                          //       //           inheritTheme: true,
+                          //       //           ctx: context),
+                          //       //     );
+                          //       //   },
+                          //       //   icon: const Icon(
+                          //       //     Icons.link,
+                          //       //     color: Colors.blue,
+                          //       //   ),
+                          //       // ),
+                          //       Text(
+                          //         newsModelProvider.dateToShow,
+                          //         maxLines: 1,
+                          //         style: smallTextStyle,
+                          //       ),
+                          //     ],
+                          //   ),
+                          // )
                         ],
                       ),
                     )

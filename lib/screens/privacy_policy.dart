@@ -101,14 +101,14 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
           ),
         ],
       ),
-      // bottomNavigationBar: _isBottomBannerAdLoaded
-      //     ? Container(
-      //         alignment: Alignment.center,
-      //         height: _bottomBannerAd.size.height.toDouble(),
-      //         width: _bottomBannerAd.size.width.toDouble(),
-      //        // child: AdWidget(ad: _bottomBannerAd),
-      //       )
-      //     : null,
+      bottomNavigationBar: _isBottomBannerAdLoaded
+          ? Container(
+              alignment: Alignment.center,
+              height: _bottomBannerAd.size.height.toDouble(),
+              width: _bottomBannerAd.size.width.toDouble(),
+              child: AdWidget(ad: _bottomBannerAd),
+            )
+          : null,
     );
   }
 }

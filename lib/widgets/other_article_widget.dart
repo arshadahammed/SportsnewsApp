@@ -94,34 +94,43 @@ class OtherArticlesWidget extends StatelessWidget {
                               style: smallTextStyle,
                             ),
                           ),
-                          FittedBox(
-                            child: Row(
-                              children: [
-                                // IconButton(
-                                //   onPressed: () {
-                                //     Navigator.push(
-                                //       context,
-                                //       PageTransition(
-                                //           type: PageTransitionType.rightToLeft,
-                                //           child: NewsDetailsWebView(
-                                //               url: newsModelProvider.url),
-                                //           inheritTheme: true,
-                                //           ctx: context),
-                                //     );
-                                //   },
-                                //   icon: const Icon(
-                                //     Icons.link,
-                                //     color: Colors.blue,
-                                //   ),
-                                // ),
-                                Text(
-                                  newsModelProvider.dateToShow,
-                                  maxLines: 1,
-                                  style: smallTextStyle,
-                                ),
-                              ],
+                          const VerticalSpacing(5),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              newsModelProvider.dateToShow,
+                              maxLines: 1,
+                              style: smallTextStyle,
                             ),
-                          )
+                          ),
+                          // FittedBox(
+                          //   child: Row(
+                          //     children: [
+                          //       // IconButton(
+                          //       //   onPressed: () {
+                          //       //     Navigator.push(
+                          //       //       context,
+                          //       //       PageTransition(
+                          //       //           type: PageTransitionType.rightToLeft,
+                          //       //           child: NewsDetailsWebView(
+                          //       //               url: newsModelProvider.url),
+                          //       //           inheritTheme: true,
+                          //       //           ctx: context),
+                          //       //     );
+                          //       //   },
+                          //       //   icon: const Icon(
+                          //       //     Icons.link,
+                          //       //     color: Colors.blue,
+                          //       //   ),
+                          //       // ),
+                          //       Text(
+                          //         newsModelProvider.dateToShow,
+                          //         maxLines: 1,
+                          //         style: smallTextStyle,
+                          //       ),
+                          //     ],
+                          //   ),
+                          // )
                         ],
                       ),
                     )

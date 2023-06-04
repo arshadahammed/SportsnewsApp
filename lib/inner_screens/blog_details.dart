@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
+import 'package:sportsnews/widgets/twittter_embed.dart';
 
 import '../consts/styles.dart';
 import '../providers/bookmarks_provider.dart';
@@ -242,8 +243,21 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
+                currentNews.twitter.isNotEmpty
+                    ? SizedBox(
+                        height:
+                            550, // Adjust the height according to your needs
+                        child: TwitterEmbedd(
+                          twitterId: currentNews.twitter,
+                        ))
+                    : SizedBox.shrink(),
+
+                //native ads
                 const VerticalSpacing(
-                  20,
+                  10,
+                ),
+                const VerticalSpacing(
+                  10,
                 ),
                 const TextContent(
                   label: 'Contents',

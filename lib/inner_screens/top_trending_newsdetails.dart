@@ -13,10 +13,12 @@ import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/providers/popular_news_provider.dart';
+import 'package:sportsnews/providers/theme_provider.dart';
 import 'package:sportsnews/providers/toptrending_provider.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sportsnews/ads_helper/ads_helper.dart';
+import 'package:sportsnews/widgets/twittter_embed.dart';
 import '../consts/styles.dart';
 import '../providers/bookmarks_provider.dart';
 import '../providers/news_provider.dart';
@@ -121,9 +123,6 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
     final newsId = ModalRoute.of(context)!.settings.arguments as String;
     final currentNews = topNewsProvider.findById(id: newsId);
 
-    // final currentNews = newsId == null
-    //   ? newsProvider.findByDate(publishedAt: publishedAt)
-    //   : newsProvider.findById(id: newsId);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: color),
@@ -318,6 +317,13 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
               )
             ],
           ),
+
+          //twitter
+          // SizedBox(
+          //     height: 400, // Adjust the height according to your needs
+          //     child: TwitterEmbedd(id: "51544")),
+          // //TwitterEmbedd(id: "51544")
+
           //native ads
           // const VerticalSpacing(20),
 
@@ -351,7 +357,16 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
-                //ads
+
+                currentNews.twitter.isNotEmpty
+                    ? SizedBox(
+                        height:
+                            550, // Adjust the height according to your needs
+                        child: TwitterEmbedd(
+                          twitterId: currentNews.twitter,
+                        ))
+                    : SizedBox.shrink(),
+
                 //native ads
                 const VerticalSpacing(
                   10,
@@ -367,7 +382,9 @@ class _TopTrendingNewsDetailsState extends State<TopTrendingNewsDetails> {
                         ),
                       )
                     : const SizedBox(),
-
+                const VerticalSpacing(
+                  10,
+                ),
                 const TextContent(
                   label: 'Contents',
                   fontSize: 20,

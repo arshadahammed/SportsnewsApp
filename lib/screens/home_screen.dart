@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemWidth: size.width * 0.9,
                       layout: SwiperLayout.STACK,
                       viewportFraction: 0.9,
-                      itemCount: 5,
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         return ChangeNotifierProvider.value(
                           value: snapshot.data![index],

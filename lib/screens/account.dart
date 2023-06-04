@@ -11,6 +11,7 @@ import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/setting_item.dart';
 import 'package:sportsnews/widgets/settings_box.dart';
 import 'package:provider/provider.dart';
+import 'package:sportsnews/widgets/twittter_embed.dart';
 
 import '../consts/global_colors.dart';
 
@@ -29,6 +30,27 @@ class _AccountPageState extends State<AccountPage> {
   int _interstitialLoadAttempts = 0;
 
   InterstitialAd? _interstitialAd;
+
+  late BannerAd _bottomBannerAd;
+
+  bool _isBottomBannerAdLoaded = false;
+
+  // // Banner Ad
+  void _createBottomBannerAd() {
+    _bottomBannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(onAdLoaded: (_) {
+        setState(() {
+          _isBottomBannerAdLoaded = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        ad.dispose();
+      }),
+    );
+    _bottomBannerAd.load();
+  }
 
   //intrestial
   void _createInterstitialAd() {
@@ -65,12 +87,15 @@ class _AccountPageState extends State<AccountPage> {
   @override
   void initState() {
     super.initState();
+    _createBottomBannerAd();
     _createInterstitialAd();
   }
 
   @override
   void dispose() {
     super.dispose();
+    _bottomBannerAd.dispose();
+
     _interstitialAd?.dispose();
   }
 
@@ -138,7 +163,7 @@ class _AccountPageState extends State<AccountPage> {
                     decoration: BoxDecoration(
                         color: isDarkMode
                             ? Theme.of(context).scaffoldBackgroundColor
-                            : Colors.brown,
+                            : Color.fromARGB(255, 5, 51, 84),
                         image: DecorationImage(
                           image: AssetImage('assets/png/logo.png'),
                           fit: BoxFit.cover,
@@ -236,16 +261,16 @@ class _AccountPageState extends State<AccountPage> {
                   color: Colors.grey.withOpacity(0.8),
                 ),
               ),
-              // SettingItem(
-              //   title: "Bookmark",
-              //   titleColor: color,
-              //   leadingIcon: "assets/icons/bookmark.svg",
-              //   bgIconColor: primary,
-              //   onTap: () {
-              //     Navigator.of(context).push(MaterialPageRoute(
-              //         builder: (context) => const SplashScreen()));
-              //   },
-              // ),
+              SettingItem(
+                title: "Bookmark",
+                titleColor: color,
+                leadingIcon: "assets/icons/bookmark.svg",
+                bgIconColor: primary,
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TwitterEmbedd(twitterId: "51544")));
+                },
+              ),
             ]),
           ),
           const SizedBox(
@@ -328,6 +353,20 @@ class _AccountPageState extends State<AccountPage> {
                 },
               ),
             ]),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: SizedBox(
+              child: _isBottomBannerAdLoaded
+                  ? Container(
+                      alignment: Alignment.center,
+                      height: _bottomBannerAd.size.height.toDouble(),
+                      width: _bottomBannerAd.size.width.toDouble(),
+                      child: AdWidget(ad: _bottomBannerAd),
+                    )
+                  : null,
+            ),
           ),
         ],
       ),

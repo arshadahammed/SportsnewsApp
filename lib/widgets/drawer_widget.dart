@@ -11,8 +11,10 @@ import 'package:sportsnews/providers/news_provider.dart';
 import 'package:sportsnews/providers/notification_provider.dart';
 import 'package:sportsnews/screens/favourite.dart';
 import 'package:sportsnews/screens/home_screen.dart';
+import 'package:sportsnews/screens/main_homescreen.dart';
 import 'package:sportsnews/services/news_api.dart';
 import 'package:sportsnews/widgets/popular_loadingwidget.dart';
+import 'package:sportsnews/widgets/twittter_embed.dart';
 
 import '../providers/theme_provider.dart';
 import 'vertical_spacing.dart';
@@ -43,9 +45,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                  color: isDarkMode
-                      ? Theme.of(context).scaffoldBackgroundColor
-                      : Colors.brown),
+                color: isDarkMode
+                    ? Theme.of(context).scaffoldBackgroundColor
+                    : Color.fromARGB(255, 5, 51, 84),
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -77,7 +80,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   context,
                   PageTransition(
                       type: PageTransitionType.rightToLeft,
-                      child: const HomeScreen(),
+                      child: MainHomeScreen(),
                       inheritTheme: true,
                       ctx: context),
                 );
@@ -88,26 +91,26 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               label: "Bookmark",
               icon: IconlyBold.bookmark,
               fct: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.rightToLeft,
-                      child: const FavouriteNews(),
-                      inheritTheme: true,
-                      ctx: context),
-                );
+                // Navigator.pushReplacement(
+                //   context,
+                //   PageTransition(
+                //       type: PageTransitionType.rightToLeft,
+                //       child: TwitterEmbedd(twitterId: "51544"),
+                //       inheritTheme: true,
+                //       ctx: context),
+                // );
               },
             ),
-            //const VerticalSpacing(20),
-            ListTilesWidget(
-              label: "check",
-              icon: IconlyBold.home,
-              fct: () {
-                //NewsAPiServices.getTopHeadlines();
-                newsProvider.cachedfetchFavouriteNews();
-                //LocalNotifications.showNotification();
-              },
-            ),
+            const VerticalSpacing(20),
+            // ListTilesWidget(
+            //   label: "check",
+            //   icon: IconlyBold.home,
+            //   fct: () {
+            //     //NewsAPiServices.getTopHeadlines();
+            //     newsProvider.cachedfetchFavouriteNews();
+            //     //LocalNotifications.showNotification();
+            //   },
+            // ),
             const Divider(
               thickness: 5,
             ),

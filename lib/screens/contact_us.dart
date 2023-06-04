@@ -34,7 +34,7 @@ class _ContactusState extends State<Contactus> {
   @override
   void initState() {
     super.initState();
-    //loadNativeAd();
+    loadNativeAd();
   }
 
   @override

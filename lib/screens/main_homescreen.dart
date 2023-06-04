@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sportsnews/ads_helper/ads_helper.dart';
+import 'package:sportsnews/ads_helper/app_open_admanager.dart';
 import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -22,6 +25,8 @@ import 'package:provider/provider.dart';
 import 'package:sportsnews/widgets/drawer_widget.dart';
 import 'package:sportsnews/widgets/snackbar.dart';
 
+const int maxFailedLoadAttempts = 3;
+
 class MainHomeScreen extends StatefulWidget {
   MainHomeScreen({super.key});
 
@@ -35,40 +40,77 @@ class _MainHomeScreenState extends State<MainHomeScreen>
   //int _selectedIndex = 0;
   //late PageController _pageController;
   int myIndex = 0;
-  //AppOpenAdManager appOpenAdManager = AppOpenAdManager();
-  //bool isPaused = false;
+  AppOpenAdManager appOpenAdManager = AppOpenAdManager();
+  bool isPaused = false;
+  int _interstitialLoadAttempts = 0;
+
+  InterstitialAd? _interstitialAd;
+
+  //intrestial
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AdHelper.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback:
+            InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _interstitialLoadAttempts = 0;
+        }, onAdFailedToLoad: (LoadAdError error) {
+          _interstitialLoadAttempts += 1;
+          _interstitialAd = null;
+          if (_interstitialLoadAttempts <= maxFailedLoadAttempts) {
+            _createInterstitialAd();
+          }
+        }));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+          onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        ad.dispose();
+        _createInterstitialAd();
+      }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        ad.dispose();
+        _createInterstitialAd();
+      });
+      _interstitialAd!.show();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     handleInitialLink();
     initDynamicLinks(context);
+    _createInterstitialAd();
 
     //FirebaseDynamicLinkService.initDynamicLinks(   context);
-    // appOpenAdManager.loadAd();
-    // WidgetsBinding.instance.addObserver(this);
+    appOpenAdManager.loadAd();
+    WidgetsBinding.instance.addObserver(this);
     // _pageController = PageController();
   }
 
   @override
   void dispose() {
     super.dispose();
+    _interstitialAd?.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //   if (state == AppLifecycleState.paused) {
-  //     isPaused = true;
-  //   }
-  //   if (state == AppLifecycleState.resumed && isPaused) {
-  //     // print("Resumed==========================");
-  //     appOpenAdManager.showAdIfAvailable();
-  //     isPaused = false;
-  //   }
-  // }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      isPaused = true;
+    }
+    if (state == AppLifecycleState.resumed && isPaused) {
+      // print("Resumed==========================");
+      appOpenAdManager.showAdIfAvailable();
+      isPaused = false;
+    }
+  }
 
   // deeplink
 
@@ -177,6 +219,8 @@ class _MainHomeScreenState extends State<MainHomeScreen>
               context, "Press back button again to Exit");
           return false;
         } else {
+          //call ad on exit
+          _showInterstitialAd();
           return true;
         }
       },
