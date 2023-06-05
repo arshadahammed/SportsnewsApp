@@ -83,7 +83,7 @@ class _FootballNewsState extends State<FootballNews> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Text(
-          'Football',
+          'Sports Caster',
           style: GoogleFonts.lobster(
               textStyle:
                   TextStyle(color: color, fontSize: 20, letterSpacing: 0.6)),

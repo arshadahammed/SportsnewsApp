@@ -5,14 +5,14 @@ import 'package:sportsnews/consts/global_colors.dart';
 
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class PrivacyPolicy extends StatefulWidget {
-  const PrivacyPolicy({Key? key}) : super(key: key);
+class AboutUs extends StatefulWidget {
+  const AboutUs({Key? key}) : super(key: key);
 
   @override
-  State<PrivacyPolicy> createState() => _PrivacyPolicyState();
+  State<AboutUs> createState() => _AboutUsState();
 }
 
-class _PrivacyPolicyState extends State<PrivacyPolicy> {
+class _AboutUsState extends State<AboutUs> {
   //late var url;
   //var initialUrl =
   //  "https://docs.google.com/document/d/e/2PACX-1vR1ML_IrNP6zLC_skdF1F5Fj_oKtdUDZUZLLBaCND6RGt84_9913edRUypDkirLJ8cL5tn2ZOgCt7zH/pub";
@@ -60,7 +60,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: const Text(
-          "Privacy Policy",
+          "About Us",
           style: TextStyle(
             color: textColor,
           ),
@@ -95,7 +95,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
           Padding(
             padding: EdgeInsets.only(left: 12, right: 12),
             child: Text(
-              "Seyfert Soft&Tech built Sports Caster app as a Free app. This SERVICE is provided by Seyfert Soft&Tech at no cost and is intended for use as is.This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.If you choose to use my Service, then you agree to the collection and use of information in relation to this policy. The Personal Information that I collect is used for providing and improving the Service. I will not use or share your information with anyone except as described in this Privacy Policy.The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which are accessible at Sports Caster app unless otherwise defined in this Privacy Policy.",
+              "Introducing Sports Caster, the ultimate sports news app that brings you all the excitement and updates from the world of cricket, football, tennis, and beyond. Stay ahead of the game with our comprehensive coverage, expert analysis, and real-time notifications.With Sports Caster, you'll never miss a beat as we deliver breaking news, match schedules, and live scores right to your fingertips. From thrilling cricket matches to intense football rivalries, and epic tennis showdowns, we've got you covered with up-to-the-minute updates.Personalize your experience by choosing your favorite sports, teams, and players to receive tailored news and highlights. Dive deep intthe game with in-depth articles",
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w200),
             ),
           ),

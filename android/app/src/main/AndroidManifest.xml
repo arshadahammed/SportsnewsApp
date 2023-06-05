@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
    <application
-        android:label="sportsnews"
+        android:label="Sports Caster"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -59,7 +59,7 @@
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
          <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-3920036584338725~5268422674"/>
          
      </application>
 </manifest>

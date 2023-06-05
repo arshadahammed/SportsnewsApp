@@ -94,7 +94,7 @@ class _ContactusState extends State<Contactus> {
                 ListTile(
                   leading: const Icon(Icons.email),
                   title: const Text('Email'),
-                  subtitle: const Text('seyfertsoftndtech@gmail.com'),
+                  subtitle: const Text('sportscaster8@gmail.com'),
                   onTap: () {
                     // Add code to handle email contact option
                   },
@@ -103,7 +103,7 @@ class _ContactusState extends State<Contactus> {
                 ListTile(
                   leading: const Icon(Icons.phone),
                   title: const Text('Phone Number'),
-                  subtitle: const Text('(123) 456-7890'),
+                  subtitle: const Text('(+91) 9526941874'),
                   onTap: () {
                     // Add code to handle phone number contact option
                   },

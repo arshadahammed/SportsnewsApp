@@ -84,7 +84,7 @@ class _OtherNewsState extends State<OtherNews> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Text(
-          'All News',
+          'Sports Caster',
           style: GoogleFonts.lobster(
               textStyle:
                   TextStyle(color: color, fontSize: 20, letterSpacing: 0.6)),

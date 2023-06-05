@@ -9,6 +9,8 @@ import 'package:sportsnews/inner_screens/bookmarks_screen.dart';
 import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
 import 'package:sportsnews/providers/news_provider.dart';
 import 'package:sportsnews/providers/notification_provider.dart';
+import 'package:sportsnews/screens/about_us.dart';
+import 'package:sportsnews/screens/contact_us.dart';
 import 'package:sportsnews/screens/favourite.dart';
 import 'package:sportsnews/screens/home_screen.dart';
 import 'package:sportsnews/screens/main_homescreen.dart';
@@ -86,31 +88,52 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 );
               },
             ),
-
+            // ListTilesWidget(
+            //   label: "Bookmark",
+            //   icon: IconlyBold.bookmark,
+            //   fct: () {
+            //     // Navigator.pushReplacement(
+            //     //   context,
+            //     //   PageTransition(
+            //     //       type: PageTransitionType.rightToLeft,
+            //     //       child: TwitterEmbedd(twitterId: "51544"),
+            //     //       inheritTheme: true,
+            //     //       ctx: context),
+            //     // );
+            //   },
+            // ),
+            const VerticalSpacing(20),
             ListTilesWidget(
-              label: "Bookmark",
-              icon: IconlyBold.bookmark,
+              label: "About us",
+              icon: IconlyBold.paper,
               fct: () {
-                // Navigator.pushReplacement(
-                //   context,
-                //   PageTransition(
-                //       type: PageTransitionType.rightToLeft,
-                //       child: TwitterEmbedd(twitterId: "51544"),
-                //       inheritTheme: true,
-                //       ctx: context),
-                // );
+                //LocalNotifications.showNotification();
+                Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.rightToLeft,
+                      child: AboutUs(),
+                      inheritTheme: true,
+                      ctx: context),
+                );
               },
             ),
             const VerticalSpacing(20),
-            // ListTilesWidget(
-            //   label: "check",
-            //   icon: IconlyBold.home,
-            //   fct: () {
-            //     //NewsAPiServices.getTopHeadlines();
-            //     newsProvider.cachedfetchFavouriteNews();
-            //     //LocalNotifications.showNotification();
-            //   },
-            // ),
+            ListTilesWidget(
+              label: "About us",
+              icon: IconlyBold.call,
+              fct: () {
+                //LocalNotifications.showNotification();
+                Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.rightToLeft,
+                      child: Contactus(),
+                      inheritTheme: true,
+                      ctx: context),
+                );
+              },
+            ),
             const Divider(
               thickness: 5,
             ),

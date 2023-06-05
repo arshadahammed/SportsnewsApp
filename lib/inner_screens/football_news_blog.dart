@@ -131,8 +131,8 @@ class _FootballNewsDetailsState extends State<FootballNewsDetails> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Text(
-          //"By ${currentNews.authorName}",
-          "By ${currentNews.newsId}",
+          "By ${currentNews.authorName}",
+          //"By ${currentNews.newsId}",
           textAlign: TextAlign.center,
           style: TextStyle(color: color),
         ),

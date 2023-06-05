@@ -268,6 +268,13 @@ class _FavouriteNewsState extends State<FavouriteNews> {
                         imagePath: 'assets/images/no_news.png',
                       ),
                     );
+                  } else if (snapshot.data!.isEmpty) {
+                    return const Expanded(
+                      child: EmptyNewsWidget(
+                        text: "No news found",
+                        imagePath: 'assets/images/no_news.png',
+                      ),
+                    );
                   }
                   //ArticlesWidget
                   return Expanded(

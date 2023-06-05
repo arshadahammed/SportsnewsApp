@@ -16,8 +16,8 @@ class LocalNotifications {
     }
     final _flutterLocalNotificationPlugin = FlutterLocalNotificationsPlugin();
     const _androidInitializationSettings =
-        AndroidInitializationSettings("app_icon");
-
+        AndroidInitializationSettings("mipmap/ic_launcher");
+    //app_icon
     final _darwinInitializationSettings = DarwinInitializationSettings();
     InitializationSettings _initilizationSettings = InitializationSettings(
       android: _androidInitializationSettings,
@@ -26,8 +26,8 @@ class LocalNotifications {
     await _flutterLocalNotificationPlugin.initialize(_initilizationSettings);
 
     final _androidNotificationDetails = AndroidNotificationDetails(
-      'high_importance_channel3',
-      'show_notification3',
+      'high_importance_channel4',
+      'show_notification4',
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
@@ -72,8 +72,8 @@ class LocalNotifications {
     await _flutterLocalNotificationPlugin.initialize(_initilizationSettings);
 
     final _androidNotificationDetails = AndroidNotificationDetails(
-      'high_importance_channel4',
-      'show_notification4',
+      'high_importance_channel5',
+      'show_notification5',
       importance: Importance.max,
       priority: Priority.high,
       enableVibration: true,

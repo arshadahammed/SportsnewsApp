@@ -231,7 +231,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             centerTitle: true,
             title: Text(
-              'Sports News',
+              'Sports Caster',
               style: GoogleFonts.lobster(
                   textStyle: TextStyle(
                       color: color, fontSize: 20, letterSpacing: 0.6)),

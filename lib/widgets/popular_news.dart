@@ -11,6 +11,11 @@ import 'package:sportsnews/services/utils.dart';
 class PopularNews extends StatelessWidget {
   String getTimeDifference(DateTime publishedTime) {
     final now = DateTime.now();
+
+    if (publishedTime.isAfter(now)) {
+      return 'Just published';
+    }
+
     final difference = now.difference(publishedTime);
 
     if (difference.inHours < 24) {
