@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:launch_review/launch_review.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/providers/theme_provider.dart';
 import 'package:sportsnews/screens/contact_us.dart';
-import 'package:sportsnews/screens/favourite.dart';
 import 'package:sportsnews/screens/privacy_policy.dart';
-import 'package:sportsnews/screens/splash/splash_screen.dart';
 import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/setting_item.dart';
-import 'package:sportsnews/widgets/settings_box.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/widgets/twittter_embed.dart';
 
@@ -163,8 +162,8 @@ class _AccountPageState extends State<AccountPage> {
                     decoration: BoxDecoration(
                         color: isDarkMode
                             ? Theme.of(context).scaffoldBackgroundColor
-                            : Color.fromARGB(255, 5, 51, 84),
-                        image: DecorationImage(
+                            : const Color.fromARGB(255, 5, 51, 84),
+                        image: const DecorationImage(
                           image: AssetImage('assets/png/logo.png'),
                           fit: BoxFit.cover,
                         )),
@@ -238,7 +237,13 @@ class _AccountPageState extends State<AccountPage> {
                 leadingIcon: "assets/icons/share.svg",
                 bgIconColor: blue,
                 titleColor: color,
-                onTap: () {},
+                onTap: () {
+                  //https://play.google.com/store/apps/details?id=com.seyfert.sportsnews
+                  Share.share(
+                    'https://play.google.com/store/apps/details?id=com.seyfert.sportsnews',
+                    subject: "Check It Out!!!",
+                  );
+                },
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 45),
@@ -252,7 +257,11 @@ class _AccountPageState extends State<AccountPage> {
                 titleColor: color,
                 leadingIcon: "assets/icons/star.svg",
                 bgIconColor: green,
-                onTap: () {},
+                onTap: () {
+                  LaunchReview.launch(
+                    androidAppId: "com.seyfert.sportsnews",
+                  );
+                },
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 45),
@@ -268,7 +277,8 @@ class _AccountPageState extends State<AccountPage> {
                 bgIconColor: primary,
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => TwitterEmbedd(twitterId: "51544")));
+                      builder: (context) =>
+                          const TwitterEmbedd(twitterId: "51544")));
                 },
               ),
             ]),
