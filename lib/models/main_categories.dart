@@ -21,12 +21,12 @@ List<MainCategories> allCategories = [
   ),
   MainCategories(
     id: "3",
-    name: "tennis",
+    name: "Tennis",
     svg: "assets/icons/category/tennis.svg",
   ),
   MainCategories(
     id: "4",
     name: "Others",
-    svg: "assets/icons/category/tennis2.svg",
+    svg: "assets/icons/category/all_sports.svg",
   ),
 ];

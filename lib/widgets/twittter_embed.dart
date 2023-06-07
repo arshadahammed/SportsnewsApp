@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/providers/theme_provider.dart';
@@ -70,15 +68,15 @@ class _TwitterEmbeddState extends State<TwitterEmbedd> {
         Center(
           child: AnimatedSwitcher(
             duration: const Duration(microseconds: 300),
-            child: isLoaded
-                ? const SizedBox.shrink()
-                : const CircularProgressIndicator(),
             transitionBuilder: ((child, animation) {
               return FadeTransition(
                 opacity: animation,
                 child: child,
               );
             }),
+            child: isLoaded
+                ? const SizedBox.shrink()
+                : const CircularProgressIndicator(),
           ),
         )
       ],

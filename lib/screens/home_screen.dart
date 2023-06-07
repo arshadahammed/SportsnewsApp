@@ -1,42 +1,26 @@
-import 'dart:developer';
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
 
-import 'package:flutter_iconly/flutter_iconly.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:sportsnews/consts/global_colors.dart';
 import 'package:sportsnews/consts/vars.dart';
-import 'package:sportsnews/inner_screens/search_screen.dart';
 import 'package:sportsnews/models/main_categories.dart';
 import 'package:sportsnews/providers/popular_news_provider.dart';
 import 'package:sportsnews/providers/toptrending_provider.dart';
-import 'package:sportsnews/screens/all_news.dart';
-import 'package:sportsnews/screens/category_pages/all_news.dart';
 import 'package:sportsnews/screens/category_pages/cricket_news.dart';
 import 'package:sportsnews/screens/category_pages/football.dart';
 import 'package:sportsnews/screens/category_pages/other_news.dart';
 import 'package:sportsnews/screens/category_pages/tennis_news.dart';
 import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/category_box.dart';
-import 'package:sportsnews/widgets/drawer_widget.dart';
 import 'package:sportsnews/widgets/empty_screen.dart';
 import 'package:sportsnews/widgets/popular_loadingwidget.dart';
 import 'package:sportsnews/widgets/popular_news.dart';
 import 'package:sportsnews/widgets/toptrending_loadingwidget.dart';
-import 'package:sportsnews/widgets/vertical_spacing.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../models/news_model.dart';
-import '../providers/news_provider.dart';
-import '../providers/theme_provider.dart';
-import '../services/news_api.dart';
-import '../widgets/articles_widget.dart';
-import '../widgets/tabs.dart';
+
 import '../widgets/top_tending.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -51,10 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
   String sortBy = SortByEnum.publishedAt.name;
   final pages = [
-    FootballNews(),
-    CricketNews(),
-    TennisNews(),
-    OtherNews(),
+    const FootballNews(),
+    const CricketNews(),
+    const TennisNews(),
+    const OtherNews(),
     //TestDart(),
   ];
   // void getCachedData() async {
@@ -64,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // getCachedData();
     //Provider.of<NewsProvider>(context).cachedfetchTopTrendingHeadlines();
@@ -74,14 +57,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
-    final newsProvider = Provider.of<NewsProvider>(context);
+    //final newsProvider = Provider.of<NewsProvider>(context);
     final popularNewsProvider = Provider.of<PopularNewsProvider>(context);
     final topTrendingNewsProvider =
         Provider.of<TopTrendingNewsProvider>(context);
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    //final themeProvider = Provider.of<ThemeProvider>(context);
 
     //statusbar
-    bool isDarkMode = themeProvider.getDarkTheme;
+    // bool isDarkMode = themeProvider.getDarkTheme;
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //     statusBarColor: Theme.of(context).scaffoldBackgroundColor));
 
@@ -147,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             //top trening
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
               child: Text(
                 "Top Trending",
                 style: TextStyle(
@@ -165,12 +148,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: topTrendingNewsProvider.fetchToptrendingNews(),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(
+                    return SizedBox(
                       height: size.height * 0.36,
-                      child: TopTrendingLoadingWidget(),
+                      child: const TopTrendingLoadingWidget(),
                     );
                   } else if (snapshot.hasError) {
-                    return Container(
+                    return SizedBox(
                       height: 200,
                       width: size.width,
                       child: const Expanded(
@@ -213,10 +196,11 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 5,
             ),
+            // ignore: avoid_unnecessary_containers
             Container(
               //margin: const EdgeInsets.fromLTRB(15, 0, 15, 10),
               child: Padding(
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -241,12 +225,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: popularNewsProvider.fetchPopularNews(),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return PopularLoadingWidget();
+                    return const PopularLoadingWidget();
                   } else if (snapshot.hasError) {
-                    return Container(
+                    return SizedBox(
                       height: 200,
                       width: size.width,
-                      child: Expanded(
+                      child: const Expanded(
                           child: Center(child: CircularProgressIndicator())
 
                           //  EmptyNewsWidget(
@@ -464,12 +448,12 @@ class _HomeScreenState extends State<HomeScreen> {
       onPressed: () {
         function();
       },
-      child: Text(text),
       style: ElevatedButton.styleFrom(
-          primary: Colors.blue,
-          padding: EdgeInsets.all(6),
+          backgroundColor: Colors.blue,
+          padding: const EdgeInsets.all(6),
           textStyle:
               const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      child: Text(text),
     );
   }
 }

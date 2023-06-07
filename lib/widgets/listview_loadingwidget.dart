@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:sportsnews/providers/bookmarks_provider.dart';
 import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/vertical_spacing.dart';
 
@@ -27,6 +23,7 @@ class _ListViewLoadingWidgetState extends State<ListViewLoadingWidget> {
     super.didChangeDependencies();
   }
 
+  @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
     return Expanded(

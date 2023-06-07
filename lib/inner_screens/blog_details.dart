@@ -5,13 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sportsnews/models/bookmarks_model.dart';
-import 'package:sportsnews/models/news_model.dart';
+
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/widgets/twittter_embed.dart';
 
 import '../consts/styles.dart';
-import '../providers/bookmarks_provider.dart';
 import '../providers/news_provider.dart';
 import '../services/global_methods.dart';
 import '../services/utils.dart';
@@ -39,6 +37,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
     super.didChangeDependencies();
   }
 
+  // ignore: unused_element
   Future<void> _getFavorites() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -99,7 +98,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   style: GoogleFonts.chathura(
                     //wordSpacing: 5,
                     //letterSpacing: 2,
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       //fontStyle: FontStyle.italic,
@@ -156,8 +155,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                             String generatedDeepLink =
                                 await FirebaseDynamicLinkService
                                     .createDynamicLink(false, currentNews);
-                            print(generatedDeepLink);
-                            print(currentNews.newsId);
+                            // print(generatedDeepLink);
+                            //print(currentNews.newsId);
                             await Share.share(generatedDeepLink,
                                 subject: 'Look what I made!');
                           } catch (err) {
@@ -191,12 +190,12 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                               prefs.getStringList('favoriteIds') ?? [];
                           setState(() {
                             if (_favoriteIds.contains(currentNews.newsId)) {
-                              print("Id already exist");
+                              //print("Id already exist");
                               return;
                             }
                             if (_isFavorite) {
                               favoriteIds.add(currentNews.newsId);
-                              print("After added : ${favoriteIds.length}");
+                              //print("After added : ${favoriteIds.length}");
                             } else {
                               favoriteIds.remove(currentNews.newsId);
                               //  print("After removed : ${favoriteIds.length}");
@@ -250,7 +249,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                         child: TwitterEmbedd(
                           twitterId: currentNews.twitter,
                         ))
-                    : SizedBox.shrink(),
+                    : const SizedBox.shrink(),
 
                 //native ads
                 const VerticalSpacing(

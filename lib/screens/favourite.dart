@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/news_provider.dart';
-import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/articles_widget.dart';
 import 'package:sportsnews/widgets/empty_screen.dart';
 import 'package:sportsnews/widgets/listview_loadingwidget.dart';
@@ -24,13 +20,11 @@ class FavouriteNews extends StatefulWidget {
 }
 
 class _FavouriteNewsState extends State<FavouriteNews> {
-  late NewsProvider _myProvider;
-  late Future<List<NewsModel>> _favlist;
   int currentPageIndex = 0;
   int perPage = 3;
   int futureBuilderItemCount = 0;
 
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   List<String> _favoriteIds = [];
   bool isListEmpty = false;
@@ -135,11 +129,10 @@ class _FavouriteNewsState extends State<FavouriteNews> {
 
   @override
   Widget build(BuildContext context) {
-    final Color color = Utils(context).getColor;
-    Size size = Utils(context).getScreenSize;
     final newsProvider = Provider.of<NewsProvider>(context);
     int totalItemsListLength = newsProvider.newsList.length;
 
+    // ignore: non_constant_identifier_names
     int ItemCount = (totalItemsListLength / perPage).ceil();
     ItemCount = ItemCount > 0 ? ItemCount : 1;
 
@@ -179,7 +172,7 @@ class _FavouriteNewsState extends State<FavouriteNews> {
                         currentPageIndex *
                             MediaQuery.of(context).size.width /
                             ItemCount, // replace buttonWidth with the actual width of your button
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
                     },
@@ -207,7 +200,7 @@ class _FavouriteNewsState extends State<FavouriteNews> {
                                     index *
                                         MediaQuery.of(context).size.width /
                                         10, // replace buttonWidth with the actual width of your button
-                                    duration: Duration(milliseconds: 500),
+                                    duration: const Duration(milliseconds: 500),
                                     curve: Curves.easeInOut,
                                   );
                                 },
@@ -237,7 +230,7 @@ class _FavouriteNewsState extends State<FavouriteNews> {
                         currentPageIndex *
                             MediaQuery.of(context).size.width /
                             ItemCount, // replace buttonWidth with the actual width of your button
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
 
@@ -309,7 +302,7 @@ class _FavouriteNewsState extends State<FavouriteNews> {
                                     ),
                               );
                             } else {
-                              return SizedBox.shrink();
+                              return const SizedBox.shrink();
                             }
                           }
                         }),
@@ -324,7 +317,7 @@ class _FavouriteNewsState extends State<FavouriteNews> {
                 // Add your button's action here
                 _showInterstitialAd();
                 _clearFavorites();
-                print('Button pressed!');
+                // print('Button pressed!');
               },
               child: const Icon(Icons.clear),
             )
@@ -340,10 +333,10 @@ Widget paginationButtons({required Function function, required String text}) {
     onPressed: () {
       function();
     },
-    child: Text(text),
     style: ElevatedButton.styleFrom(
-        primary: Colors.blue,
-        padding: EdgeInsets.all(6),
+        backgroundColor: Colors.blue,
+        padding: const EdgeInsets.all(6),
         textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+    child: Text(text),
   );
 }

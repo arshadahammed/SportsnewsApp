@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/services/cached_news_api.dart';
 import 'package:sportsnews/services/news_api.dart';
-import 'package:collection/collection.dart';
 
 class NewsProvider with ChangeNotifier {
   List<NewsModel> newsList = [];

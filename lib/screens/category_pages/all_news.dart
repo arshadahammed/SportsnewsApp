@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/providers/all_news_provider.dart';
-import 'package:sportsnews/providers/news_provider.dart';
-import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/articles_widget.dart';
 import 'package:sportsnews/widgets/empty_screen.dart';
 import 'package:sportsnews/widgets/listview_loadingwidget.dart';
@@ -26,6 +22,7 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
   int perPage = 4;
   int futureBuilderItemCount = 0;
 
+  // ignore: prefer_final_fields
   ScrollController _scrollController = ScrollController();
 
   //ads
@@ -75,11 +72,10 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
 
   @override
   Widget build(BuildContext context) {
-    final Color color = Utils(context).getColor;
-    Size size = Utils(context).getScreenSize;
     final allNewsProvider = Provider.of<AllNewsProvider>(context);
     int totalItemsListLength = allNewsProvider.newsList.length;
 
+    // ignore: non_constant_identifier_names
     int ItemCount = (totalItemsListLength / perPage).ceil();
     ItemCount = ItemCount > 0 ? ItemCount : 1;
     return Scaffold(
@@ -118,7 +114,7 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                         currentPageIndex *
                             MediaQuery.of(context).size.width /
                             ItemCount, // replace buttonWidth with the actual width of your button
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
                     },
@@ -146,7 +142,7 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                                     index *
                                         MediaQuery.of(context).size.width /
                                         10, // replace buttonWidth with the actual width of your button
-                                    duration: Duration(milliseconds: 500),
+                                    duration: const Duration(milliseconds: 500),
                                     curve: Curves.easeInOut,
                                   );
                                 },
@@ -176,7 +172,7 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                         currentPageIndex *
                             MediaQuery.of(context).size.width /
                             ItemCount, // replace buttonWidth with the actual width of your button
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
 
@@ -212,7 +208,8 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                     child: ListView.builder(
                         //(currentPageIndex + 1) * perPage
                         //itemCount: snapshot.data!.length,
-                        itemCount: snapshot.data!.length + 1,
+                        itemCount: snapshot.data!.length +
+                            (_isInlineBannerAdLoaded ? 1 : 0),
                         itemBuilder: (ctx, index) {
                           if (index == adPosition && _isInlineBannerAdLoaded) {
                             // Render the ad widget
@@ -226,9 +223,10 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                             ); // Replace with your ad widget implementation
                           } else {
                             // Calculate the actual index excluding the ad position
-                            int actualIndex =
-                                index - (index > adPosition ? 1 : 0);
-
+                            int actualIndex = index;
+                            if (_isInlineBannerAdLoaded && index > adPosition) {
+                              actualIndex -= 1;
+                            }
                             if (actualIndex >= (currentPageIndex * perPage) &&
                                 actualIndex <
                                     ((currentPageIndex + 1) * perPage)) {
@@ -240,7 +238,7 @@ class _AllCategoryNewsState extends State<AllCategoryNews> {
                                     ),
                               );
                             } else {
-                              return SizedBox.shrink();
+                              return const SizedBox.shrink();
                             }
                           }
                         }),
@@ -259,10 +257,10 @@ Widget paginationButtons({required Function function, required String text}) {
     onPressed: () {
       function();
     },
-    child: Text(text),
     style: ElevatedButton.styleFrom(
-        primary: Colors.blue,
-        padding: EdgeInsets.all(6),
+        backgroundColor: Colors.blue,
+        padding: const EdgeInsets.all(6),
         textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+    child: Text(text),
   );
 }

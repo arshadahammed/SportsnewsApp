@@ -1,6 +1,5 @@
 //Packages
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -17,7 +16,6 @@ import 'package:sportsnews/inner_screens/tennis_blog_details.dart';
 import 'package:sportsnews/inner_screens/top_trending_newsdetails.dart';
 import 'package:sportsnews/providers/all_news_provider.dart';
 import 'package:sportsnews/providers/cricket_news_provider.dart';
-import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/providers/football_news_provider.dart';
 import 'package:sportsnews/providers/news_provider.dart';
 import 'package:sportsnews/providers/notification_provider.dart';
@@ -26,16 +24,9 @@ import 'package:sportsnews/providers/popular_news_provider.dart';
 import 'package:sportsnews/providers/search_news_provider.dart';
 import 'package:sportsnews/providers/tennis_news_provider.dart';
 import 'package:sportsnews/providers/toptrending_provider.dart';
-import 'package:sportsnews/screens/main_homescreen.dart';
 import 'package:sportsnews/screens/splash/splash_screen.dart';
-import 'package:sportsnews/services/utils.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 //S
-import 'providers/bookmarks_provider.dart';
-import 'screens/home_screen.dart';
 
 //Consts
 import 'consts/theme_data.dart';
@@ -55,7 +46,7 @@ void main() async {
     ChangeNotifierProvider<ThemeProvider>(
       create: (_) =>
           ThemeProvider(initialTheme: true), // Set initial theme here
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -77,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     //getCachedData();
     super.initState();
     LocalNotifications.sendSheduledNotification(
-        "Check Sports Caster ", "New Sports news added");
+        "Check Sports Caster", "New Sports news added");
   }
 
   //Fetch the current theme
@@ -149,19 +140,24 @@ class _MyAppState extends State<MyApp> {
                 title: 'Sports Caster',
                 theme:
                     Styles.themeData(themeChangeProvider.getDarkTheme, context),
-                home: SplashScreen(),
+                home: const SplashScreen(),
                 routes: {
-                  NewsDetailsScreen.routeName: (ctx) => NewsDetailsScreen(),
+                  NewsDetailsScreen.routeName: (ctx) =>
+                      const NewsDetailsScreen(),
                   DeepLinkNewsDetailsScreen.routeName: (ctx) =>
                       const DeepLinkNewsDetailsScreen(),
-                  PopularNewsDetails.routeName: (ctx) => PopularNewsDetails(),
+                  PopularNewsDetails.routeName: (ctx) =>
+                      const PopularNewsDetails(),
                   TopTrendingNewsDetails.routeName: (ctx) =>
-                      TopTrendingNewsDetails(),
-                  AllNewsDetails.routeName: (ctx) => AllNewsDetails(),
-                  FootballNewsDetails.routeName: (ctx) => FootballNewsDetails(),
-                  CricketNewsDetails.routeName: (ctx) => CricketNewsDetails(),
-                  TennisNewsDetails.routeName: (ctx) => TennisNewsDetails(),
-                  OtherNewsDetails.routeName: (ctx) => OtherNewsDetails(),
+                      const TopTrendingNewsDetails(),
+                  AllNewsDetails.routeName: (ctx) => const AllNewsDetails(),
+                  FootballNewsDetails.routeName: (ctx) =>
+                      const FootballNewsDetails(),
+                  CricketNewsDetails.routeName: (ctx) =>
+                      const CricketNewsDetails(),
+                  TennisNewsDetails.routeName: (ctx) =>
+                      const TennisNewsDetails(),
+                  OtherNewsDetails.routeName: (ctx) => const OtherNewsDetails(),
                 },
               ));
         }));

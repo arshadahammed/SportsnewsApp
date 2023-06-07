@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sportsnews/ads_helper/ads_helper.dart';
@@ -11,16 +8,11 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sportsnews/inner_screens/search_screen.dart';
-import 'package:sportsnews/models/news_model.dart';
-import 'package:sportsnews/providers/firebase_dynamic_link.dart';
 import 'package:sportsnews/screens/account.dart';
-import 'package:sportsnews/screens/all_news.dart';
 import 'package:sportsnews/screens/category_pages/all_news.dart';
 import 'package:sportsnews/screens/favourite.dart';
 import 'package:sportsnews/screens/home_screen.dart';
 import 'package:sportsnews/services/utils.dart';
-import 'package:sportsnews/providers/search_news_provider.dart';
-import 'package:provider/provider.dart';
 
 import 'package:sportsnews/widgets/drawer_widget.dart';
 import 'package:sportsnews/widgets/snackbar.dart';
@@ -28,7 +20,7 @@ import 'package:sportsnews/widgets/snackbar.dart';
 const int maxFailedLoadAttempts = 3;
 
 class MainHomeScreen extends StatefulWidget {
-  MainHomeScreen({super.key});
+  const MainHomeScreen({super.key});
 
   @override
   State<MainHomeScreen> createState() => _MainHomeScreenState();
@@ -139,14 +131,14 @@ class _MainHomeScreenState extends State<MainHomeScreen>
     //await searchNewsProvider.fetchAllNews();
 
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-      print("DYnamic Link Started");
+      // print("DYnamic Link Started");
 
       final Uri deepLink = dynamicLinkData.link;
       //deepLink != null
       handleDeepLink(deepLink);
     }).onError((error) {
-      print('onLink error');
-      print(error.message);
+      // print('onLink error');
+      //print(error.message);
     });
   }
 
@@ -186,7 +178,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
       final String newsId = pathSegments.last;
 
       // Navigate to the news article page using the newsId
-      print('Navigating to news article with ID: $newsId');
+      //print('Navigating to news article with ID: $newsId');
       Navigator.pushNamed(context, DeepLinkNewsDetailsScreen.routeName,
           arguments: newsId);
     }
@@ -195,10 +187,10 @@ class _MainHomeScreenState extends State<MainHomeScreen>
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetList = [
-      HomeScreen(),
-      AllCategoryNews(),
-      FavouriteNews(),
-      AccountPage(),
+      const HomeScreen(),
+      const AllCategoryNews(),
+      const FavouriteNews(),
+      const AccountPage(),
     ];
     final Color color = Utils(context).getColor;
     return WillPopScope(
@@ -269,7 +261,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                 });
               },
               currentIndex: myIndex,
-              items: [
+              items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   label: 'Home',

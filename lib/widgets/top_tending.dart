@@ -3,12 +3,9 @@ import 'dart:developer';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sportsnews/inner_screens/top_trending_newsdetails.dart';
 
-import '../inner_screens/blog_details.dart';
-import '../inner_screens/news_details_webview.dart';
 import '../models/news_model.dart';
 import '../services/utils.dart';
 
@@ -18,7 +15,6 @@ class TopTrendingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = Utils(context).getScreenSize;
-    final Color color = Utils(context).getColor;
     final newsModelProvider = Provider.of<NewsModel>(context);
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 0),
@@ -58,7 +54,7 @@ class TopTrendingWidget extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                     style: GoogleFonts.chathura(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         //fontStyle: FontStyle.italic,

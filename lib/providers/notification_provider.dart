@@ -1,7 +1,6 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, prefer_const_constructors
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter/material.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:permission_handler/permission_handler.dart';
 
 class LocalNotifications {
@@ -11,7 +10,7 @@ class LocalNotifications {
     final _status = await Permission.notification.request();
 
     if (_status != PermissionStatus.granted) {
-      print("notification perission denied");
+      // print("notification perission denied");
       return;
     }
     final _flutterLocalNotificationPlugin = FlutterLocalNotificationsPlugin();
@@ -57,7 +56,7 @@ class LocalNotifications {
     final _status = await Permission.notification.request();
 
     if (_status != PermissionStatus.granted) {
-      print("notification perission denied");
+      // print("notification perission denied");
       return;
     }
     final _flutterLocalNotificationPlugin = FlutterLocalNotificationsPlugin();

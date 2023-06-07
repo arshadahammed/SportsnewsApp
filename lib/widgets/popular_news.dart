@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sportsnews/inner_screens/blog_details.dart';
 import 'package:sportsnews/inner_screens/popular_blog_details.dart';
 import 'package:sportsnews/models/news_model.dart';
-import 'package:sportsnews/services/utils.dart';
 
 class PopularNews extends StatelessWidget {
   String getTimeDifference(DateTime publishedTime) {
@@ -31,8 +27,6 @@ class PopularNews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final newsModelProvider = Provider.of<NewsModel>(context);
-    final size = Utils(context).getScreenSize;
-    final Color color = Utils(context).getColor;
     DateTime publishedTime = DateTime.parse(newsModelProvider.publishedAt);
 
     final timeDifference = getTimeDifference(publishedTime);
@@ -79,7 +73,7 @@ class PopularNews extends StatelessWidget {
               SizedBox(
                   height: 220,
                   child: Container(
-                    margin: EdgeInsets.only(right: 16),
+                    margin: const EdgeInsets.only(right: 16),
                     width: 200,
                     // color: Colors.blue,
                     child: Column(
@@ -94,7 +88,7 @@ class PopularNews extends StatelessWidget {
                             width: double.infinity,
                           ),
                         )),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Padding(
@@ -104,7 +98,7 @@ class PopularNews extends StatelessWidget {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.chathura(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 //fontStyle: FontStyle.italic,
@@ -116,7 +110,8 @@ class PopularNews extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
                             timeDifference,
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
                           ),
                         )
                       ],

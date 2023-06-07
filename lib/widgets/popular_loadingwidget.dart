@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sportsnews/services/utils.dart';
 
@@ -54,7 +52,6 @@ class PopularNewsShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = Utils(context).getScreenSize;
-    final Color color = Utils(context).getColor;
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 0),
       child: Shimmer.fromColors(
@@ -91,7 +88,7 @@ class PopularNewsShimmer extends StatelessWidget {
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return Container(
-                      margin: EdgeInsets.only(right: 16),
+                      margin: const EdgeInsets.only(right: 16),
                       width: 200,
                       // color: Colors.blue,
                       child: Column(
@@ -105,7 +102,7 @@ class PopularNewsShimmer extends StatelessWidget {
                                     width: double.infinity,
                                     color: widgetShimmerColor,
                                   ))),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           Padding(

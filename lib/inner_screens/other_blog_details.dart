@@ -9,23 +9,15 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+// ignore: depend_on_referenced_packages
 import 'package:cross_file/cross_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportsnews/ads_helper/ads_helper.dart';
-import 'package:sportsnews/models/bookmarks_model.dart';
-import 'package:sportsnews/models/news_model.dart';
-import 'package:sportsnews/providers/all_news_provider.dart';
-import 'package:sportsnews/providers/cricket_news_provider.dart';
 import 'package:sportsnews/providers/firebase_dynamic_link.dart';
-import 'package:sportsnews/providers/football_news_provider.dart';
 import 'package:sportsnews/providers/other_news_provider.dart';
-import 'package:sportsnews/providers/popular_news_provider.dart';
-import 'package:sportsnews/providers/tennis_news_provider.dart';
 import 'package:sportsnews/widgets/twittter_embed.dart';
 
 import '../consts/styles.dart';
-import '../providers/bookmarks_provider.dart';
-import '../providers/news_provider.dart';
 import '../services/global_methods.dart';
 import '../services/utils.dart';
 import '../widgets/vertical_spacing.dart';
@@ -52,6 +44,7 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
   //   super.didChangeDependencies();
   // }
 
+  // ignore: unused_element
   Future<void> _getFavorites() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -162,7 +155,7 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
                   style: GoogleFonts.chathura(
                     //wordSpacing: 5,
                     //letterSpacing: 2,
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       //fontStyle: FontStyle.italic,
@@ -217,8 +210,8 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
                             String generatedDeepLink =
                                 await FirebaseDynamicLinkService
                                     .createDynamicLink(false, currentNews);
-                            print(generatedDeepLink);
-                            print(currentNews.newsId);
+                            // print(generatedDeepLink);
+                            // print(currentNews.newsId);
                             // await Share.share(generatedDeepLink,
                             //     subject: 'Look what I made!');
 
@@ -243,7 +236,7 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
 
                               // );
                               String subject =
-                                  "*${currentNews.content}*\n\n*Read News From here*:-\n\n$generatedDeepLink";
+                                  "*${currentNews.title}*\n\n*Read News From here*:-\n\n$generatedDeepLink";
                               await Share.shareXFiles(
                                 [XFile(file.path)],
                                 text: subject,
@@ -286,12 +279,12 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
                               prefs.getStringList('favoriteIds') ?? [];
                           setState(() {
                             if (_favoriteIds.contains(currentNews.newsId)) {
-                              print("Id already exist");
+                              //print("Id already exist");
                               return;
                             }
                             if (_isFavorite) {
                               favoriteIds.add(currentNews.newsId);
-                              print("After added : ${favoriteIds.length}");
+                              // print("After added : ${favoriteIds.length}");
                             } else {
                               favoriteIds.remove(currentNews.newsId);
                               //  print("After removed : ${favoriteIds.length}");
@@ -363,7 +356,7 @@ class _OtherNewsDetailsState extends State<OtherNewsDetails> {
                         child: TwitterEmbedd(
                           twitterId: currentNews.twitter,
                         ))
-                    : SizedBox.shrink(),
+                    : const SizedBox.shrink(),
 
                 //native ads
                 const VerticalSpacing(

@@ -96,7 +96,7 @@ class NewsAPiServices {
       for (var v in data["articles"]) {
         newsTempList.add(v);
         // log(v.toString());
-        print(data["articles"].length.toString());
+        // print(data["articles"].length.toString());
       }
       return NewsModel.newsFromSnapshot(newsTempList);
     } catch (error) {

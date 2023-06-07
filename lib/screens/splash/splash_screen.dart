@@ -4,7 +4,6 @@ import 'package:sportsnews/providers/theme_provider.dart';
 import "package:sportsnews/screens/main_homescreen.dart";
 import 'package:sportsnews/providers/all_news_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:sportsnews/services/utils.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -32,13 +31,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color color = Utils(context).getColor;
     final themeProvider = Provider.of<ThemeProvider>(context);
     bool isDarkMode = themeProvider.getDarkTheme;
 
@@ -50,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => MainHomeScreen(),
+          builder: (context) => const MainHomeScreen(),
         ),
       );
       appOpenAdManager.showAdIfAvailable();
@@ -107,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: isDarkMode ? Colors.white : Colors.black,
               ),
             ),
-            Text(
+            const Text(
               "SeyFert Soft&Tech",
               style: TextStyle(
                   color: Color.fromARGB(255, 13, 70, 116),

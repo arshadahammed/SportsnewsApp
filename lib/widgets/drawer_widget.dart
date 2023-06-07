@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:sportsnews/inner_screens/bookmarks_screen.dart';
-import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
-import 'package:sportsnews/providers/news_provider.dart';
-import 'package:sportsnews/providers/notification_provider.dart';
 import 'package:sportsnews/screens/about_us.dart';
 import 'package:sportsnews/screens/contact_us.dart';
-import 'package:sportsnews/screens/favourite.dart';
-import 'package:sportsnews/screens/home_screen.dart';
-import 'package:sportsnews/screens/main_homescreen.dart';
-import 'package:sportsnews/services/news_api.dart';
-import 'package:sportsnews/widgets/popular_loadingwidget.dart';
-import 'package:sportsnews/widgets/twittter_embed.dart';
 
 import '../providers/theme_provider.dart';
 import 'vertical_spacing.dart';
@@ -37,7 +24,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final newsProvider = Provider.of<NewsProvider>(context);
     bool isDarkMode = themeProvider.getDarkTheme;
 
     return Drawer(
@@ -49,7 +35,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               decoration: BoxDecoration(
                 color: isDarkMode
                     ? Theme.of(context).scaffoldBackgroundColor
-                    : Color.fromARGB(255, 5, 51, 84),
+                    : const Color.fromARGB(255, 5, 51, 84),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -73,19 +59,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ],
               ),
             ),
-            const VerticalSpacing(20),
+            const VerticalSpacing(5),
             ListTilesWidget(
               label: "Home",
               icon: IconlyBold.home,
               fct: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.rightToLeft,
-                      child: MainHomeScreen(),
-                      inheritTheme: true,
-                      ctx: context),
-                );
+                // Navigator.push(
+                //   context,
+                //   PageTransition(
+                //       type: PageTransitionType.rightToLeft,
+                //       child: MainHomeScreen(),
+                //       inheritTheme: true,
+                //       ctx: context),
+                // );
+                Navigator.pop(context);
               },
             ),
             // ListTilesWidget(
@@ -102,33 +89,33 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             //     // );
             //   },
             // ),
-            const VerticalSpacing(20),
+            const VerticalSpacing(5),
             ListTilesWidget(
               label: "About us",
               icon: IconlyBold.paper,
               fct: () {
                 //LocalNotifications.showNotification();
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   PageTransition(
                       type: PageTransitionType.rightToLeft,
-                      child: AboutUs(),
+                      child: const AboutUs(),
                       inheritTheme: true,
                       ctx: context),
                 );
               },
             ),
-            const VerticalSpacing(20),
+            const VerticalSpacing(5),
             ListTilesWidget(
-              label: "About us",
+              label: "Contact us",
               icon: IconlyBold.call,
               fct: () {
                 //LocalNotifications.showNotification();
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   PageTransition(
                       type: PageTransitionType.rightToLeft,
-                      child: Contactus(),
+                      child: const Contactus(),
                       inheritTheme: true,
                       ctx: context),
                 );

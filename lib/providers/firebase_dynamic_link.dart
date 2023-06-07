@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:provider/provider.dart';
-import 'package:sportsnews/inner_screens/blog_details.dart';
 import 'package:sportsnews/inner_screens/deeplink_blogdetails.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ class FirebaseDynamicLinkService {
     bool short,
     NewsModel newsModal,
   ) async {
-    String _linkMessage;
+    String linkMessage;
     //${newsModal.newsId}
     final dynamicLinkParams = DynamicLinkParameters(
       uriPrefix: 'https://sportcaster.page.link',
@@ -27,6 +26,7 @@ class FirebaseDynamicLinkService {
       ),
     );
 
+    // ignore: unused_label
     socialMetaTagParameters:
     SocialMetaTagParameters(
       title: newsModal.title,
@@ -46,15 +46,16 @@ class FirebaseDynamicLinkService {
       url = await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
     }
 
-    _linkMessage = url.toString();
+    linkMessage = url.toString();
     log(newsModal.newsId);
-    log(_linkMessage);
-    return _linkMessage;
+    log(linkMessage);
+    return linkMessage;
   }
 
   //
 
   static Future<void> initDynamicLinks(BuildContext context) async {
+    // ignore: unused_local_variable
     dynamic newsModelProvider = Provider.of<NewsModel>(context);
 
     final PendingDynamicLinkData? data =
@@ -64,16 +65,17 @@ class FirebaseDynamicLinkService {
     if (deepLink != null) {
       // Extract the news item ID or other relevant information from the deep link URL
       final newsItemId = deepLink.queryParameters['id'];
-      print("newsid ${newsItemId}");
+      //print("newsid $newsItemId");
       if (newsItemId != null) {
         // Perform any necessary actions based on the news item ID
         // For example, navigate to a specific news item in your app
-        print("news item id is not null");
+        // print("news item id is not null");
         try {
+          // ignore: use_build_context_synchronously
           Navigator.pushNamed(context, DeepLinkNewsDetailsScreen.routeName,
               arguments: "1");
         } catch (e) {
-          print(e.toString());
+          //print(e.toString());
         }
       }
     }
@@ -94,7 +96,7 @@ class FirebaseDynamicLinkService {
               Navigator.pushNamed(context, DeepLinkNewsDetailsScreen.routeName,
                   arguments: "1");
             } catch (e) {
-              print(e.toString());
+              // print(e.toString());
             }
           }
         }
@@ -102,7 +104,7 @@ class FirebaseDynamicLinkService {
       onError: (error) async {
         // Handle any errors related to deep linking
         // You can access the error message using error.message
-        print(error.toString());
+        //print(error.toString());
       },
     );
   }

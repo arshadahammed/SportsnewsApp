@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:sportsnews/inner_screens/all_news_blog.dart';
 import 'package:sportsnews/inner_screens/cricket_news_blog.dart';
-import 'package:sportsnews/inner_screens/football_news_blog.dart';
-import 'package:sportsnews/inner_screens/news_details_webview.dart';
-import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
 import 'package:sportsnews/services/utils.dart';
 import 'package:sportsnews/widgets/vertical_spacing.dart';
 
 import '../consts/styles.dart';
-import '../inner_screens/blog_details.dart';
 
 class CricketArticlesWidget extends StatelessWidget {
   const CricketArticlesWidget({

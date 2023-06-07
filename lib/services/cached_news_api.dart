@@ -1,14 +1,10 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportsnews/consts/api_consts.dart';
 import 'package:sportsnews/consts/http_exceptions.dart';
 import 'package:sportsnews/models/news_model.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:http/http.dart' as http;
 
 class CachedNewsAPiServices {
   //allnews
@@ -78,7 +74,7 @@ class CachedNewsAPiServices {
       for (var article in data["articles"]) {
         if (article['top_trend'] == true) {
           newsTempList.add(article);
-          print("length ${newsTempList.length}");
+          //print("length ${newsTempList.length}");
         }
         //newsTempList.add(v);
       }
@@ -118,7 +114,7 @@ class CachedNewsAPiServices {
       for (var article in data["articles"]) {
         if (article['popular'] == true) {
           newsTempList.add(article);
-          print("length ${newsTempList.length}");
+          // print("length ${newsTempList.length}");
         }
         //newsTempList.add(v);
       }
@@ -158,7 +154,7 @@ class CachedNewsAPiServices {
       for (var article in data["articles"]) {
         if (article['category'] == "football") {
           footballArticles.add(article);
-          print("length ${footballArticles.length}");
+          // print("length ${footballArticles.length}");
         }
       }
 
@@ -199,7 +195,7 @@ class CachedNewsAPiServices {
       for (var article in data["articles"]) {
         if (article['category'] == "cricket") {
           footballArticles.add(article);
-          print("length ${footballArticles.length}");
+          //print("length ${footballArticles.length}");
         }
       }
 
@@ -239,7 +235,7 @@ class CachedNewsAPiServices {
       for (var article in data["articles"]) {
         if (article['category'] == "tennis") {
           footballArticles.add(article);
-          print("length ${footballArticles.length}");
+          //print("length ${footballArticles.length}");
         }
       }
 
@@ -279,7 +275,7 @@ class CachedNewsAPiServices {
       for (var article in data["articles"]) {
         if (article['category'] == "others") {
           footballArticles.add(article);
-          print("length ${footballArticles.length}");
+          //print("length ${footballArticles.length}");
         }
       }
 
@@ -319,7 +315,7 @@ class CachedNewsAPiServices {
       for (var article in data["articles"]) {
         if (article['slug'] == query) {
           footballArticles.add(article);
-          print("length ${footballArticles.length}");
+          //print("length ${footballArticles.length}");
         }
       }
 
@@ -370,15 +366,15 @@ class CachedNewsAPiServices {
 
       //log(newsTempList.length.toString());
 
-      List<String> _favoriteIds = [];
+      List<String> favoriteIds = [];
       //log(_favoriteIds.length.toString());
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      _favoriteIds = prefs.getStringList('favoriteIds') ?? [];
+      favoriteIds = prefs.getStringList('favoriteIds') ?? [];
 
       List<NewsModel> newsModelList = NewsModel.newsFromSnapshot(newsTempList);
 
       return newsModelList
-          .where((news) => _favoriteIds.contains(news.newsId))
+          .where((news) => favoriteIds.contains(news.newsId))
           .toList();
 
       //return NewsModel.newsFromSnapshot(newsTempList);

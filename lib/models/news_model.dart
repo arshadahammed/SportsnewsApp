@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:reading_time/reading_time.dart';
 import 'package:sportsnews/services/global_methods.dart';
@@ -17,7 +19,7 @@ class NewsModel with ChangeNotifier {
       readingTimeText,
       slug,
       twitter;
-  bool top_trend, popular; 
+  bool top_trend, popular;
 
   NewsModel({
     required this.newsId,

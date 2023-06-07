@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:sportsnews/consts/http_exceptions.dart';
-import 'package:sportsnews/models/bookmarks_model.dart';
 import 'package:sportsnews/models/news_model.dart';
 
 import '../consts/api_consts.dart';
@@ -96,7 +95,7 @@ class NewsAPiServices {
       for (var v in data["articles"]) {
         newsTempList.add(v);
 
-        print(data["articles"].length.toString());
+        //print(data["articles"].length.toString());
       }
       return NewsModel.newsFromSnapshot(newsTempList);
     } catch (error) {
@@ -121,7 +120,7 @@ class NewsAPiServices {
       for (var article in data["articles"]) {
         if (article['category'] == "football") {
           footballArticles.add(article);
-          print("length ${footballArticles.length}");
+          // print("length ${footballArticles.length}");
         }
       }
 
@@ -149,7 +148,7 @@ class NewsAPiServices {
       for (var article in data["articles"]) {
         if (article['category'] == "cricket") {
           footballArticles.add(article);
-          print("length ${footballArticles.length}");
+          //print("length ${footballArticles.length}");
         }
       }
 
@@ -177,7 +176,7 @@ class NewsAPiServices {
       for (var article in data["articles"]) {
         if (article['category'] == "tennis") {
           footballArticles.add(article);
-          print("length ${footballArticles.length}");
+          //print("length ${footballArticles.length}");
         }
       }
 
@@ -204,7 +203,7 @@ class NewsAPiServices {
       for (var article in data["articles"]) {
         if (article['category'] == "others") {
           footballArticles.add(article);
-          print("length ${footballArticles.length}");
+          //print("length ${footballArticles.length}");
         }
       }
 

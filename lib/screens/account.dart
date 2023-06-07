@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:launch_review/launch_review.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sportsnews/ads_helper/ads_helper.dart';
 import 'package:sportsnews/providers/theme_provider.dart';
@@ -253,14 +253,15 @@ class _AccountPageState extends State<AccountPage> {
                 ),
               ),
               SettingItem(
-                title: "Rate us",
+                title: "Review & Rate us",
                 titleColor: color,
                 leadingIcon: "assets/icons/star.svg",
                 bgIconColor: green,
-                onTap: () {
-                  LaunchReview.launch(
-                    androidAppId: "com.seyfert.sportsnews",
-                  );
+                onTap: () async {
+                  final InAppReview inAppReview = InAppReview.instance;
+                  if (await inAppReview.isAvailable()) {
+                    inAppReview.requestReview();
+                  }
                 },
               ),
               Padding(
